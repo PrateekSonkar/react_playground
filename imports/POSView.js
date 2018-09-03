@@ -1,38 +1,70 @@
 import React from 'react';
+import _lodash from 'lodash';
+import FoodGroup from './FoodGroup';
+import FoodItemsList from './FoodItemsList';
+import SubCategoryFilter from './SubCategoryFilter';
 
 export default class POSView extends React.Component{
   constructor(props){
     super(props);
+    this.updateFilterCriteriaGroup = this.updateFilterCriteriaGroup.bind(this);
+    this.updateFilterCriteriaSubCategory = this.updateFilterCriteriaSubCategory.bind(this);
     this.state = {
       error:undefined,
-      billno : 9
+      billno : 9,
+      menuItems : props.foodMenu,
+      filterfooditem :{
+        
+      }
     }
+    //console.log("As Props",props.foodMenu);
+    //console.log("As local state",this.state.menuItems);
+    //console.log("lodash result",_lodash.uniqBy(this.state.menuItems,{group: "FOOD"}))
+    _lodash.uniqBy(props.foodMenu,"group").map((foodGroup,index) => {
+      console.log("from map function",foodGroup.group, "index",index);
+    })
+    _lodash.uniqBy(_lodash.filter(props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => {
+      console.log("from map function subcategory ",foodGroup.subcategory, "index",index);
+    })
   }
 
+  updateFilterCriteriaGroup(value){
+    console.log("updateFilterCriteriaGroup ",value);
+    //this.setState((prevState)=>({options : prevState.options.concat([option])}));    
+    this.setState((prevState) => ({
+      filterfooditem:{
+        group:value
+      }
+    }));
+  }
+
+  updateFilterCriteriaSubCategory(value){
+    console.log("updateFilterCriteriaSubCategory ",value);
+    //this.setState((prevState)=>({options : prevState.options.concat([option])}));    
+    this.setState((prevState) => ({
+      filterfooditem:{
+        ...prevState.filterfooditem,
+        subcategory:value
+      }
+    }));
+  }
+  
+  
   render(){
     return(
       <div className="row">
         <div className="col s8">
           <div className="row">
             <div className="col s3">
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 1</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 2</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 3</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 4</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 5</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 6</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 7</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:10}}>Button 8</a>
+              {_lodash.uniqBy(this.props.foodMenu,"group").map((foodGroup,index) => <FoodGroup key={foodGroup.group + index} foodGroup={foodGroup.group} updateFilter={this.updateFilterCriteriaGroup} /> ) }              
             </div>
             <div className="col s9">
-              <a className="waves-effect waves-light btn-large" style={{margin:20}}>L Button hkjah saj khaskh aksh2</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}} >L Button 2</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}} >L Button 3</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}}>L Button 4</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}}>L Button 5</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}}>L Button 6</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}} >L Button 7</a>
-              <a className="waves-effect waves-light btn-large" style={{margin:20}}>L Button 8</a>
+              <div className="row">        
+                {_lodash.uniqBy(_lodash.filter(this.props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => <SubCategoryFilter key={foodGroup.subcategory + index} foodSubCategory={foodGroup.subcategory} updateFilter={this.updateFilterCriteriaSubCategory} />)}                
+              </div>
+              <div className="row">
+                {_lodash.filter(this.props.foodMenu,this.state.filterfooditem).map((foodItem,index) => <FoodItemsList key={foodItem.group + index} foodItem={foodItem.item} /> ) }                
+              </div>              
             </div>
           </div>
         </div>

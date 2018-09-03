@@ -17,6 +17,10 @@ export default class IndecisionApp extends React.Component {
     this.handleOption = this.handleOption.bind(this);
     this.state = {
       options : [],
+      itemviewfilter : {
+        group:undefined,
+        subcategory:undefined
+      },
       staticmenu : [{"group":"FOOD","subgroup":"APPETIZERS","category":"CONTINENTAL","subcategory":"NON VEG","item":"CHICKEN CHIMICHANGA","rate":1000.00,"tax":5},
       {"group":"FOOD","subgroup":"APPETIZERS","category":"CONTINENTAL","subcategory":"NON VEG","item":"GLAZED CHICKEN SKEWERS","rate":1000.00,"tax":5},
       {"group":"FOOD","subgroup":"APPETIZERS","category":"CONTINENTAL","subcategory":"NON VEG","item":"CHICKEN POPCORN","rate":1000.00,"tax":5},
