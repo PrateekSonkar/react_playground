@@ -3,31 +3,56 @@ import _lodash from 'lodash';
 import FoodGroup from './FoodGroup';
 import FoodItemsList from './FoodItemsList';
 import SubCategoryFilter from './SubCategoryFilter';
+import ItemOrdered from './ItemOrdered';
+//import OrderType from './OrderType';
 
 export default class POSView extends React.Component{
   constructor(props){
     super(props);
     this.updateFilterCriteriaGroup = this.updateFilterCriteriaGroup.bind(this);
     this.updateFilterCriteriaSubCategory = this.updateFilterCriteriaSubCategory.bind(this);
+    this.addItemToOrder = this.addItemToOrder.bind(this);
     this.state = {
       error:undefined,
       billno : 9,
       menuItems : props.foodMenu,
-      filterfooditem :{
-        
-      }
+      currentorderlist : [{itemid:"T12",value:{item:"A",quantity:1,rate:200}}],
+      filterfooditem :{}      
     }
-    //console.log("As Props",props.foodMenu);
-    //console.log("As local state",this.state.menuItems);
-    //console.log("lodash result",_lodash.uniqBy(this.state.menuItems,{group: "FOOD"}))
-    _lodash.uniqBy(props.foodMenu,"group").map((foodGroup,index) => {
-      console.log("from map function",foodGroup.group, "index",index);
-    })
-    _lodash.uniqBy(_lodash.filter(props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => {
-      console.log("from map function subcategory ",foodGroup.subcategory, "index",index);
-    })
+    //{itemid:"T12",value:{item:"A",quantity:1,rate:200}},{itemid:"T13",value:{item:"B",quantity:1,rate:200}}
   }
 
+  testMethod(){
+    alert("I was called");
+  }
+
+  addItemToOrder(itemObject){
+    console.log("addItemToOrder", itemObject);
+    itemObject["quantity"] = 1;
+    let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:itemObject["id"]})
+    if(isAvailable === -1){
+      console.log("Item can be added to Order");
+      let forOrder = {"itemId":itemObject["id"],value:itemObject}
+      console.log("Item to be added : ", forOrder);
+      //this.setState((prevState) => {currentorderlist : prevState.currentorderlist.push(forOrder)});
+      this.setState((prevState) =>{
+        return {
+          currentorderlist:prevState.currentorderlist.concat([forOrder])
+        }
+      });
+    } else {
+      alert("Item already in order");
+    }
+  }
+
+  handleQuantityInc(value){
+
+  }
+
+  handleQuantityDec(value){
+    
+  }
+  
   updateFilterCriteriaGroup(value){
     console.log("updateFilterCriteriaGroup ",value);
     //this.setState((prevState)=>({options : prevState.options.concat([option])}));    
@@ -37,6 +62,8 @@ export default class POSView extends React.Component{
       }
     }));
   }
+
+
 
   updateFilterCriteriaSubCategory(value){
     console.log("updateFilterCriteriaSubCategory ",value);
@@ -63,23 +90,26 @@ export default class POSView extends React.Component{
                 {_lodash.uniqBy(_lodash.filter(this.props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => <SubCategoryFilter key={foodGroup.subcategory + index} foodSubCategory={foodGroup.subcategory} updateFilter={this.updateFilterCriteriaSubCategory} />)}                
               </div>
               <div className="row">
-                {_lodash.filter(this.props.foodMenu,this.state.filterfooditem).map((foodItem,index) => <FoodItemsList key={foodItem.group + index} foodItem={foodItem.item} /> ) }                
+                <ul className="collection" >
+                  {_lodash.filter(this.props.foodMenu,this.state.filterfooditem).map((foodItem,index) => <FoodItemsList key={foodItem.id} foodItem={foodItem} addItemToOrder={this.addItemToOrder} /> ) }                  
+                </ul>
+                
               </div>              
             </div>
           </div>
         </div>
-        <div className="col s4">
+        <div className="col s4">          
           <div className="row" >
             <label style={{margin:15}}>
-              <input name="group1" type="radio"  />
+              <input name="ordertype" type="radio"  />
               <span>Dine In</span>
             </label>              
             <label style={{margin:15}}>
-              <input name="group1" type="radio"  />
+              <input name="ordertype" type="radio"  />
               <span>Pick Up</span>
             </label>              
             <label style={{margin:15}}>
-              <input name="group1" type="radio"  />
+              <input name="ordertype" type="radio"  />
               <span>Take Away</span>
             </label>              
           </div>
@@ -88,7 +118,7 @@ export default class POSView extends React.Component{
               Bill No: {this.state.billno}
             </div>
           </div>
-          <div className="row">
+          <div className="row">          
             <table>
               <thead>
                 <tr>
@@ -98,25 +128,8 @@ export default class POSView extends React.Component{
                     <th>Tax</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Alvin</td>
-                  <td>Eclair</td>
-                  <td>$0.87</td>
-                  <td>$0.87</td>
-                </tr>
-                <tr>
-                  <td>Alan</td>
-                  <td>Jellybean</td>
-                  <td>$3.76</td>
-                  <td>$3.76</td>
-                </tr>
-                <tr>
-                  <td>Jonathan</td>
-                  <td>Lollipop</td>
-                  <td>$7.00</td>
-                  <td>$7.00</td>
-                </tr>
+              <tbody>                
+                {this.state.currentorderlist.map((item,index) => <ItemOrdered key={index} item={item} /> )}
               </tbody>
             </table>
           </div>
