@@ -4,13 +4,12 @@ export default class FoodItemsList extends React.Component{
   constructor(props){
     super(props)
     this.onClickHandler = this.onClickHandler.bind(this);
-    console.log("FoodItemsList", this.props.foodItem)
   }
 
   onClickHandler(e){
     e.preventDefault();
     //e.target.elements.option.value
-    console.log("event",e.target.getAttribute("value"));
+    //console.log("event",e.target.getAttribute("value"));
     this.props.addItemToOrder(JSON.parse(e.target.getAttribute("value")));
   }
 

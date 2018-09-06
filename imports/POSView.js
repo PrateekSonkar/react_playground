@@ -1,10 +1,13 @@
 import React from 'react';
 import _lodash from 'lodash';
+import update from 'immutability-helper';
+
 import FoodGroup from './FoodGroup';
 import FoodItemsList from './FoodItemsList';
 import SubCategoryFilter from './SubCategoryFilter';
 import ItemOrdered from './ItemOrdered';
-//import OrderType from './OrderType';
+import SettlementOptions from './SettlementOptions';
+import OrderType from './OrderType';
 
 export default class POSView extends React.Component{
   constructor(props){
@@ -14,10 +17,18 @@ export default class POSView extends React.Component{
     this.addItemToOrder = this.addItemToOrder.bind(this);
     this.handleQuantityInc = this.handleQuantityInc.bind(this);
     this.handleQuantityDec = this.handleQuantityDec.bind(this);
+    this.deleteItemFromOrderList = this.deleteItemFromOrderList.bind(this);
+    this.addBillAmount = this.addBillAmount.bind(this);
+    this.updateSettlemtOpted = this.updateSettlemtOpted.bind(this);
+    this.updateSelectedOrderType = this.updateSelectedOrderType.bind(this);
     this.state = {
       error:undefined,
       billno : 9,
-      menuItems : props.foodMenu,
+      billAmount : 0,
+      settlementopted: "",
+      ordertypeselected:"",
+      settlementoptions: ["Card","Cash"],
+      ordertypes :["Dine In","Pick Up","Take Away"],
       currentorderlist : [],
       filterfooditem :{}      
     }
@@ -28,51 +39,104 @@ export default class POSView extends React.Component{
     alert("I was called");
   }
 
+  updateSelectedOrderType(value){
+    this.setState((prevState) => {
+      return {
+        ordertypeselected: value
+      }
+    })
+  }
+
+  updateSettlemtOpted(value){
+    this.setState((prevState) => {
+      return {
+        settlementoption: value
+      }
+    })
+  }
+
+  addBillAmount(){
+    this.setState((prevState) => {
+      let totalAmount = 0;
+      _lodash.forEach(prevState.currentorderlist,function(value){
+        totalAmount += (value.value.rate * value.value.quantity);
+      });
+      this.setState((prevState) => {
+        return {
+          billAmount : totalAmount
+        }
+      })
+    });
+  }
+
   addItemToOrder(itemObject){
-    console.log("addItemToOrder", itemObject);
     itemObject["quantity"] = 1;
     let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:itemObject["id"]})
     if(isAvailable === -1){
-      console.log("Item can be added to Order");
       let forOrder = {"itemId":itemObject["id"],value:itemObject}
-      console.log("Item to be added : ", forOrder);
-
-      //this.setState((prevState) => {currentorderlist : prevState.currentorderlist.push(forOrder)});
       this.setState((prevState) =>{
         return {
           currentorderlist:prevState.currentorderlist.concat([forOrder])
         }
-      });
+      },()=>{this.addBillAmount()});
     } else {
       alert("Item already in order");
     }
   }
 
   //will only increase quantity by 1
-  handleQuantityInc(quantity,forItem){
-    console.log("quantity ",quantity, " for item ", forItem);
+  handleQuantityInc(quantity,forItem){    
+    //quantity is not used for now but scoped for future use;
     let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:forItem});
     if(isAvailable > -1){
-      let itemList = this.state.currentorderlist;
-      console.log("before manupulation",itemList);
-      itemList[isAvailable].value.quantity = itemList[isAvailable].value.quantity + quantity
-      console.log("after manupulation",itemList);
-      // this.setState((prevState) => {
-      //   return {
-      //     currentorderlist[isAvailable]
-      //   }
-      // })
+      this.setState((prevState) => {
+        let updatedItem = update(prevState.currentorderlist[isAvailable],{value:{quantity:{$set:prevState.currentorderlist[isAvailable].value.quantity + 1}}});
+        let obj = Object.assign({},prevState);        
+        delete obj.currentorderlist[isAvailable];
+        obj.currentorderlist[isAvailable] = updatedItem;        
+        return {
+          currentorderlist : obj.currentorderlist
+        }
+      },()=>{this.addBillAmount()});
     }
   }
 
   //will only increase quantity by 1
-  handleQuantityDec(quantity,value){
-    
+  handleQuantityDec(quantity,forItem){
+    //quantity is not used for now but scoped for future use;
+    let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:forItem});
+    if(isAvailable > -1){
+        this.setState((prevState) => {
+          if(prevState.currentorderlist[isAvailable].value.quantity > 1){
+            let updatedItem = update(prevState.currentorderlist[isAvailable],{value:{quantity:{$set:prevState.currentorderlist[isAvailable].value.quantity - 1}}});
+            let obj = Object.assign({},prevState);        
+            delete obj.currentorderlist[isAvailable];
+            obj.currentorderlist[isAvailable] = updatedItem;        
+            return {
+              currentorderlist : obj.currentorderlist
+            } 
+          } else if (prevState.currentorderlist[isAvailable].value.quantity === 1){
+              //condition to remove
+              this.deleteItemFromOrderList(forItem);
+            }
+        },()=>{this.addBillAmount()});
+    }
+  }
+
+  deleteItemFromOrderList(forItem){
+    let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:forItem});
+    if(isAvailable > -1){
+      this.setState((prevState) => {
+        let obj = Object.assign({},prevState);
+        obj.currentorderlist.splice(isAvailable,1);
+        return {
+          currentorderlist : obj.currentorderlist 
+        }
+      },()=>{this.addBillAmount()})
+    }
   }
   
   updateFilterCriteriaGroup(value){
-    console.log("updateFilterCriteriaGroup ",value);
-    //this.setState((prevState)=>({options : prevState.options.concat([option])}));    
     this.setState((prevState) => ({
       filterfooditem:{
         group:value
@@ -80,11 +144,7 @@ export default class POSView extends React.Component{
     }));
   }
 
-
-
   updateFilterCriteriaSubCategory(value){
-    console.log("updateFilterCriteriaSubCategory ",value);
-    //this.setState((prevState)=>({options : prevState.options.concat([option])}));    
     this.setState((prevState) => ({
       filterfooditem:{
         ...prevState.filterfooditem,
@@ -120,18 +180,7 @@ export default class POSView extends React.Component{
         <div className="col s5"> 
           <div style={{margin:15}} >         
             <div className="row">
-              <label style={{margin:15}}>
-                <input name="ordertype" type="radio"  />
-                <span>Dine In</span>
-              </label>              
-              <label style={{margin:15}}>
-                <input name="ordertype" type="radio"  />
-                <span>Pick Up</span>
-              </label>              
-              <label style={{margin:15}}>
-                <input name="ordertype" type="radio"  />
-                <span>Take Away</span>
-              </label>              
+              {this.state.ordertypes.map((ordertype,index) => <OrderType ordertype={ordertype} updateSelectedOrderType={this.updateSelectedOrderType} key={ordertype+index} /> )}              
             </div>
             <div className="row right-align" >
               <div>
@@ -149,24 +198,17 @@ export default class POSView extends React.Component{
                   </tr>
                 </thead>
                 <tbody>                
-                  {this.state.currentorderlist.map((item,index) => <ItemOrdered key={index} item={item} handleQuantityInc={this.handleQuantityInc} handleQuantityDec={this.handleQuantityDec} /> )}
+                  {this.state.currentorderlist.map((item,index) => <ItemOrdered key={index} item={item} handleQuantityInc={this.handleQuantityInc} handleQuantityDec={this.handleQuantityDec}  deleteItemFromOrderList={this.deleteItemFromOrderList} /> )}
                 </tbody>
               </table>
             </div>
             <div className="row right-align">
-              Total : {this.state.billno}
+              Total : {this.state.billAmount}
             </div>
             <div className="row">
               <div>Payment Mode</div>
               <div>
-                <label style={{margin:10}}>
-                  <input name="paymode" type="radio"  />
-                  <span>Cash</span>
-                </label>              
-                <label style={{margin:10}}>
-                  <input name="paymode" type="radio"  />
-                  <span>Card</span>
-                </label>                              
+                {this.state.settlementoptions.map((settlementoption) => <SettlementOptions settlementoption={settlementoption} updateSettlemtOpted={this.updateSettlemtOpted} key={settlementoption} />)}
               </div>
             </div>
             <div className="row">              
