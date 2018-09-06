@@ -15,7 +15,7 @@ export default class FoodGroup extends React.Component{
 
   render(){
     return(
-      <a className="waves-effect waves-light btn-large" style={{margin:10}} value={this.props.foodGroup} onClick={this.onClickHandler} >{this.props.foodGroup}</a>
+      <li className="collection-item" style={{margin:10}} value={this.props.foodGroup} onClick={this.onClickHandler} >{this.props.foodGroup}</li>
     );
   }
 }

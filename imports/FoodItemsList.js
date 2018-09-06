@@ -23,7 +23,6 @@ export default class FoodItemsList extends React.Component{
       >
           {this.props.foodItem.item}
       </li>
-
     );
   }
 }

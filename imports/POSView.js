@@ -12,11 +12,13 @@ export default class POSView extends React.Component{
     this.updateFilterCriteriaGroup = this.updateFilterCriteriaGroup.bind(this);
     this.updateFilterCriteriaSubCategory = this.updateFilterCriteriaSubCategory.bind(this);
     this.addItemToOrder = this.addItemToOrder.bind(this);
+    this.handleQuantityInc = this.handleQuantityInc.bind(this);
+    this.handleQuantityDec = this.handleQuantityDec.bind(this);
     this.state = {
       error:undefined,
       billno : 9,
       menuItems : props.foodMenu,
-      currentorderlist : [{itemid:"T12",value:{item:"A",quantity:1,rate:200}}],
+      currentorderlist : [],
       filterfooditem :{}      
     }
     //{itemid:"T12",value:{item:"A",quantity:1,rate:200}},{itemid:"T13",value:{item:"B",quantity:1,rate:200}}
@@ -34,6 +36,7 @@ export default class POSView extends React.Component{
       console.log("Item can be added to Order");
       let forOrder = {"itemId":itemObject["id"],value:itemObject}
       console.log("Item to be added : ", forOrder);
+
       //this.setState((prevState) => {currentorderlist : prevState.currentorderlist.push(forOrder)});
       this.setState((prevState) =>{
         return {
@@ -45,11 +48,25 @@ export default class POSView extends React.Component{
     }
   }
 
-  handleQuantityInc(value){
-
+  //will only increase quantity by 1
+  handleQuantityInc(quantity,forItem){
+    console.log("quantity ",quantity, " for item ", forItem);
+    let isAvailable = _lodash.findIndex(this.state.currentorderlist,{itemId:forItem});
+    if(isAvailable > -1){
+      let itemList = this.state.currentorderlist;
+      console.log("before manupulation",itemList);
+      itemList[isAvailable].value.quantity = itemList[isAvailable].value.quantity + quantity
+      console.log("after manupulation",itemList);
+      // this.setState((prevState) => {
+      //   return {
+      //     currentorderlist[isAvailable]
+      //   }
+      // })
+    }
   }
 
-  handleQuantityDec(value){
+  //will only increase quantity by 1
+  handleQuantityDec(quantity,value){
     
   }
   
@@ -80,12 +97,14 @@ export default class POSView extends React.Component{
   render(){
     return(
       <div className="row">
-        <div className="col s8">
+        <div className="col s7">
           <div className="row">
-            <div className="col s3">
-              {_lodash.uniqBy(this.props.foodMenu,"group").map((foodGroup,index) => <FoodGroup key={foodGroup.group + index} foodGroup={foodGroup.group} updateFilter={this.updateFilterCriteriaGroup} /> ) }              
+            <div className="col s4">
+              <ul className="collection">
+                {_lodash.uniqBy(this.props.foodMenu,"group").map((foodGroup,index) => <FoodGroup key={foodGroup.group + index} foodGroup={foodGroup.group} updateFilter={this.updateFilterCriteriaGroup} /> ) }
+              </ul>
             </div>
-            <div className="col s9">
+            <div className="col s8">
               <div className="row">        
                 {_lodash.uniqBy(_lodash.filter(this.props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => <SubCategoryFilter key={foodGroup.subcategory + index} foodSubCategory={foodGroup.subcategory} updateFilter={this.updateFilterCriteriaSubCategory} />)}                
               </div>
@@ -98,71 +117,73 @@ export default class POSView extends React.Component{
             </div>
           </div>
         </div>
-        <div className="col s4">          
-          <div className="row" >
-            <label style={{margin:15}}>
-              <input name="ordertype" type="radio"  />
-              <span>Dine In</span>
-            </label>              
-            <label style={{margin:15}}>
-              <input name="ordertype" type="radio"  />
-              <span>Pick Up</span>
-            </label>              
-            <label style={{margin:15}}>
-              <input name="ordertype" type="radio"  />
-              <span>Take Away</span>
-            </label>              
-          </div>
-          <div className="row right-align" >
-            <div>
-              Bill No: {this.state.billno}
-            </div>
-          </div>
-          <div className="row">          
-            <table>
-              <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Tax</th>
-                </tr>
-              </thead>
-              <tbody>                
-                {this.state.currentorderlist.map((item,index) => <ItemOrdered key={index} item={item} /> )}
-              </tbody>
-            </table>
-          </div>
-          <div className="row right-align">
-            Total : {this.state.billno}
-          </div>
-          <div className="row">
-            <div>Payment Mode</div>
-            <div>
-              <label style={{margin:10}}>
-                <input name="paymode" type="radio"  />
-                <span>Cash</span>
+        <div className="col s5"> 
+          <div style={{margin:15}} >         
+            <div className="row">
+              <label style={{margin:15}}>
+                <input name="ordertype" type="radio"  />
+                <span>Dine In</span>
               </label>              
-              <label style={{margin:10}}>
-                <input name="paymode" type="radio"  />
-                <span>Card</span>
-              </label>                              
+              <label style={{margin:15}}>
+                <input name="ordertype" type="radio"  />
+                <span>Pick Up</span>
+              </label>              
+              <label style={{margin:15}}>
+                <input name="ordertype" type="radio"  />
+                <span>Take Away</span>
+              </label>              
             </div>
-          </div>
-          <div className="row">              
-            <a 
-              className="waves-effect waves-light btn-small" 
-              style={{margin:10}}
-            >
-              Save & Print
-            </a>
-            <a 
-              className="waves-effect waves-light btn-small" 
-              style={{margin:10}}
-            >
-              Print KOT
-            </a>
-          </div>
+            <div className="row right-align" >
+              <div>
+                Bill No: {this.state.billno}
+              </div>
+            </div>
+            <div className="row">          
+              <table>
+                <thead>
+                  <tr>
+                      <th>Item</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>                
+                  {this.state.currentorderlist.map((item,index) => <ItemOrdered key={index} item={item} handleQuantityInc={this.handleQuantityInc} handleQuantityDec={this.handleQuantityDec} /> )}
+                </tbody>
+              </table>
+            </div>
+            <div className="row right-align">
+              Total : {this.state.billno}
+            </div>
+            <div className="row">
+              <div>Payment Mode</div>
+              <div>
+                <label style={{margin:10}}>
+                  <input name="paymode" type="radio"  />
+                  <span>Cash</span>
+                </label>              
+                <label style={{margin:10}}>
+                  <input name="paymode" type="radio"  />
+                  <span>Card</span>
+                </label>                              
+              </div>
+            </div>
+            <div className="row">              
+              <a 
+                className="waves-effect waves-light btn-small" 
+                style={{margin:10}}
+              >
+                Save & Print
+              </a>
+              <a 
+                className="waves-effect waves-light btn-small" 
+                style={{margin:10}}
+              >
+                Print KOT
+              </a>
+            </div>
+          </div>  
         </div>
       </div>
     )

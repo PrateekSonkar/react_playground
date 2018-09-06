@@ -3,20 +3,33 @@ import React from 'react';
 export default class ItemOrdered extends React.Component{
   constructor(props){
     super(props);
-    console.log("from ItemOrdered ", this.props.item);
-    console.log("from ItemOrdered value", this.props.item.value);
-    console.log("from ItemOrdered value item", this.props.item.value.item);
-    console.log("from ItemOrdered value rate", this.props.item.value.rate);
-    console.log("from ItemOrdered value quantity", this.props.item.value.quantity);
+    this.addQuantity = this.addQuantity.bind(this)
+    
+  }
+
+  addQuantity(e){
+    console.log(e.target.getAttribute("value"))
+    console.log(e.target.parentElement.parentElement.getAttribute("rel"));
+    this.props.handleQuantityInc(e.target.getAttribute("value"),e.target.parentElement.parentElement.getAttribute("rel"));
   }
 
   render(){
     return (
-      <tr>
+      <tr rel={this.props.item.value.id}>
         <th>{this.props.item.value.item}</th>
-        <th><button>-1</button> <span>{this.props.item.value.quantity}</span> <button>+1</button> </th>
+        <th>{this.props.item.value.quantity}</th>
         <th>{this.props.item.value.quantity * this.props.item.value.rate}</th>
-        <th><button>X</button></th>
+        <th>
+          <i className="material-icons circle white-text" style={{backgroundColor:"green"}} onClick={this.addQuantity} value={this.props.item.value.quantity}>
+            add
+          </i>
+          <i className="material-icons circle white-text" style={{backgroundColor:"yellow"}} value={this.props.item.value.quantity} >
+            remove
+          </i>
+          <i className="material-icons circle white-text" style={{backgroundColor:"red"}}>
+            delete_forever
+          </i>
+        </th>
       </tr>
     )
   }

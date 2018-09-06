@@ -59,7 +59,10 @@ export default class IndecisionApp extends React.Component {
       {"id":"F36","group":"FOOD","subgroup":"SALAD","category":"SALADS","subcategory":"NON VEG","item":"CHICKEN CAESER SALAD","rate":800.00,"tax":5},
       {"id":"F37","group":"FOOD","subgroup":"SALAD","category":"SALADS","subcategory":"NON VEG","item":"BBQ CHICKEN SALAD","rate":800.00,"tax":5},
       {"id":"F38","group":"FOOD","subgroup":"SALAD","category":"SALADS","subcategory":"VEG","item":"CAESER SALAD","rate":600.00,"tax":5},
-      {"id":"F39","group":"FOOD","subgroup":"SALAD","category":"SALADS","subcategory":"VEG","item":"GREEN FETA SALAD","rate":600.00,"tax":5}]
+      {"id":"F39","group":"FOOD","subgroup":"SALAD","category":"SALADS","subcategory":"VEG","item":"GREEN FETA SALAD","rate":600.00,"tax":5},
+      {"id":"F40","group":"TOBACCO","subgroup":"SALAD","category":"SALADS","subcategory":"VEG","item":"BIDI","rate":600.00,"tax":5},
+      {"id":"F41","group":"LIQUOR","subgroup":"SALAD","category":"SALADS","subcategory":"VEG","item":"BEER","rate":600.00,"tax":5},
+    ]
     }
   }
 
