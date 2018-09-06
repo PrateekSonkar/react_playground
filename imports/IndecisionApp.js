@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AddOption from './AddOption';
 import Header from './Header';
 import Action from './Action';
@@ -7,6 +8,7 @@ import NewCustomerRegistration from './NewCustomerRegistration';
 import CreateMenu from './CreateMenu';
 import ConfigureRestaurant from './ConfigureRestaurant';
 import POSView from './POSView';
+
 
 
 export default class IndecisionApp extends React.Component {    
@@ -91,7 +93,7 @@ export default class IndecisionApp extends React.Component {
     const optionsArr = ["Things One","Things Two","Things Three"];
     return (
       <div>
-        <Header title={title} subtitle={subtitle}/>
+        {/*<Header title={title} subtitle={subtitle}/>
         <Action 
           hasOptions = {this.state.options.length > 0}
           pickOptions = {this.pickOptions}
@@ -102,19 +104,8 @@ export default class IndecisionApp extends React.Component {
         />
         <AddOption
           handleOption = {this.handleOption}
-        />          
-        {/*First Form to registerer new clients
-        */}
-        <h5>Register Restaurant</h5>
-        <NewCustomerRegistration />
-        {/*First Screen post email & mobile confirmation
-        */}
-        <h5>Configure Restaurant</h5>
-        <ConfigureRestaurant />
-        {/* restaurant will now configure menu
-        */}
-        <h5>Create Menu</h5>
-        <CreateMenu />
+    />          */}
+        
         <h5>POS View</h5>
         <POSView foodMenu={this.state.staticmenu} />
       </div>
