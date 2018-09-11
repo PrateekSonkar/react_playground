@@ -1,5 +1,7 @@
 import React from 'react';
 import TaxRow from './TaxRow';
+import {Taxes} from './api/Taxes';
+import { Tracker } from 'meteor/tracker';
 
 export default class CreateTax extends React.Component {
   constructor(props){
@@ -11,6 +13,7 @@ export default class CreateTax extends React.Component {
     this.disableTax = this.disableTax.bind(this);
   }
 
+  
   handleOnSubmit(e){
     e.preventDefault();
     console.log(e.target.elements.taxname);

@@ -13,6 +13,7 @@ import CreateOrderType from '../imports/CreateOrderType';
 import CreateFloorArea from '../imports/CreateFloorArea';
 import CreateTimeSlot from '../imports/CreateTimeSlot';
 import CreateTableChairSet from '../imports/CreateTableChairSet';
+import ConfigureFloor from '../imports/ConfigureFloor';
 
 
 const AppRouter = () => {
@@ -23,7 +24,7 @@ const AppRouter = () => {
       <Switch>
         <Route path="/" component={IndecisionApp} exact={true} />
         <Route path="/register" component={NewCustomerRegistration}  />
-        <Route path="/configure" component={ConfigureRestaurant} />
+        <Route path="/configure/:id" component={ConfigureRestaurant} />
         <Route path="/createmenu" component={CreateMenu} />
         <Route path="/pos" component={POSView} />
         <Route path="/createtax" component={CreateTax} />
@@ -32,6 +33,7 @@ const AppRouter = () => {
         <Route path="/floorarea"  component={CreateFloorArea} />
         <Route path="/timeslot"  component={CreateTimeSlot} />
         <Route path="/tcset"  component={CreateTableChairSet} />
+        <Route path="/configurefloor"  component={ConfigureFloor} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

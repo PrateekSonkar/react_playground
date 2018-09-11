@@ -15,6 +15,7 @@ const Header = () => (
         <li> <NavLink to="/floorarea" activeClassName="active" >Floor Area</NavLink> </li>
         <li> <NavLink to="/timeslot" activeClassName="active" >Time Slot</NavLink> </li>
         <li> <NavLink to="/tcset" activeClassName="active" >Table Set</NavLink> </li>
+        <li> <NavLink to="/configurefloor" activeClassName="active" >Configure Floor</NavLink> </li>
       </ul>
     </div>
   </nav>

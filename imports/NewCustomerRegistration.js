@@ -1,4 +1,8 @@
 import React from 'react';
+import shortId from 'shortid';
+import {Restaurants} from './api/RegisterNewRestaurant'
+
+
 
 export default class NewCustomerRegistration extends React.Component {
   constructor(props){
@@ -19,7 +23,8 @@ export default class NewCustomerRegistration extends React.Component {
     newCustomerDetail["restaurataname"] = e.target.elements.restaurataname.value;
     newCustomerDetail["location"] = e.target.elements.location.value;
     newCustomerDetail["piccode"] = e.target.elements.piccode.value;
-    console.log(newCustomerDetail);
+    newCustomerDetail["shortid"] = shortId.generate();    
+    Restaurants.insert(newCustomerDetail);
     //const error = this.props.handleOption(option);
     //this.setState(()=>({error}))
     
@@ -32,11 +37,13 @@ export default class NewCustomerRegistration extends React.Component {
           <input type="text" name="yourname" placeholder="Your Name" />
           <input type="text" name="email" placeholder="Email"/>
           <input type="text" name="mobile" placeholder="Mobile Number"/>
-          <input type="text" name="contacts" placeholder="Additional Contact"/>
+          <input type="text" name="contacts" placeholder="Office Contact"/>
           <input type="text" name="restaurataname" placeholder="Restarant Name"/>
           <input type="text" name="location" placeholder="Address"/>
           <input type="text" name="piccode" placeholder="Pin Code"/>
-          <button>Add Option</button>
+          <div className="row">
+            <button className="waves-effect waves-light btn" >Add Option</button>
+          </div>
         </ form>
       </div>
     )
