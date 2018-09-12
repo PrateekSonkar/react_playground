@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { TableSets } from './api/TableSets';
 
 export default class CreateTableChairSet extends React.Component {
   constructor(props){
@@ -18,6 +18,8 @@ export default class CreateTableChairSet extends React.Component {
     newtcset["tcsettable"] = e.target.elements.tcsettable.value;    
     newtcset["tcsetchairs"] = e.target.elements.tcsetchairs.value;
     newtcset["tccode"] = e.target.elements.tccode.value;
+    newtcset["isActive"] = true;
+    TableSets.insert(newtcset);
     console.log(newtcset);
     this.setState((prevState) => {
       return {

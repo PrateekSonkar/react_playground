@@ -14,6 +14,7 @@ import CreateFloorArea from '../imports/CreateFloorArea';
 import CreateTimeSlot from '../imports/CreateTimeSlot';
 import CreateTableChairSet from '../imports/CreateTableChairSet';
 import ConfigureFloor from '../imports/ConfigureFloor';
+import CreateFloor from '../imports/CreateFloors';
 
 
 const AppRouter = () => {
@@ -30,6 +31,7 @@ const AppRouter = () => {
         <Route path="/createtax" component={CreateTax} />
         <Route path="/createuser" component={CreateUser} />
         <Route path="/ordertype" component={CreateOrderType} />
+        <Route path="/createfloor"  component={CreateFloor} />
         <Route path="/floorarea"  component={CreateFloorArea} />
         <Route path="/timeslot"  component={CreateTimeSlot} />
         <Route path="/tcset"  component={CreateTableChairSet} />

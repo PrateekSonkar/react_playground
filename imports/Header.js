@@ -12,6 +12,7 @@ const Header = () => (
         <li> <NavLink to="/createtax" activeClassName="active" >Create Tax</NavLink> </li>
         <li> <NavLink to="/createuser" activeClassName="active" >Create User</NavLink> </li>
         <li> <NavLink to="/ordertype" activeClassName="active" >Order Type</NavLink> </li>
+        <li> <NavLink to="/createfloor" activeClassName="active" >Create Floor</NavLink> </li>
         <li> <NavLink to="/floorarea" activeClassName="active" >Floor Area</NavLink> </li>
         <li> <NavLink to="/timeslot" activeClassName="active" >Time Slot</NavLink> </li>
         <li> <NavLink to="/tcset" activeClassName="active" >Table Set</NavLink> </li>

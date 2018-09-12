@@ -1,4 +1,5 @@
 import React from 'react';
+import {Employees} from './api/EmployeesDetails';
 
 export default class CreateUser extends React.Component {
   constructor(props){
@@ -22,7 +23,9 @@ export default class CreateUser extends React.Component {
     let newUser = {};
     newUser["employeename"] = e.target.elements.employeename.value;
     newUser["employeecode"] = e.target.elements.employeecode.value;
-    newUser["employeerole"] = this.state.role;        
+    newUser["employeerole"] = this.state.role; 
+    newUser["isActive"] = true;
+    Employees.insert(newUser);
     console.log("New User Object : ", newUser);
   }
 

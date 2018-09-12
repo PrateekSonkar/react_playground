@@ -20,8 +20,10 @@ export default class CreateTax extends React.Component {
     let newTaxRate = {};
     newTaxRate["taxname"] = e.target.elements.taxname.value;
     newTaxRate["taxcode"] = e.target.elements.taxcode.value;
-    newTaxRate["taxpercentage"] = e.target.elements.taxpercentage.value;    
+    newTaxRate["taxpercentage"] = e.target.elements.taxpercentage.value;  
+    newTaxRate["isEnabled"] = true;  
     console.log(newTaxRate);
+    Taxes.insert(newTaxRate);
     this.setState((prevState) => {
       return {
         taxrates : prevState.taxrates.concat([newTaxRate])
@@ -30,7 +32,7 @@ export default class CreateTax extends React.Component {
   }
 
   disableTax(taxcode){
-    console.log("TAx Disabled : ", taxcode);
+    console.log("Tax Disabled : ", taxcode);
   }
 
   render(){
@@ -51,20 +53,20 @@ export default class CreateTax extends React.Component {
         </div>
         <div className="row"></div>
         <div className="row">          
-              <table>
-                <thead>
-                  <tr>
-                      <th>Tax Name</th>
-                      <th>Tax Code</th>
-                      <th>Tax %age</th>
-                      <th>Action</th>                      
-                  </tr>
-                </thead>
-                <tbody>   
-                  {this.state.taxrates.map((taxrate,index) => <TaxRow key={index} taxname={taxrate.taxname} taxcode={taxrate.taxcode} taxpercentage={taxrate.taxpercentage} disableTax={this.disableTax}  /> )}
-                </tbody>
-              </table>
-            </div>
+          <table>
+            <thead>
+              <tr>
+                  <th>Tax Name</th>
+                  <th>Tax Code</th>
+                  <th>Tax %age</th>
+                  <th>Action</th>                      
+              </tr>
+            </thead>
+            <tbody>   
+              {this.state.taxrates.map((taxrate,index) => <TaxRow key={index} taxname={taxrate.taxname} taxcode={taxrate.taxcode} taxpercentage={taxrate.taxpercentage} disableTax={this.disableTax}  /> )}
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   }

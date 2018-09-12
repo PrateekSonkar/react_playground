@@ -1,5 +1,6 @@
 import React from 'react';
-import { FloorAreas } from './api/FloorAreas';
+import ViewFloorList from './ViewFloorList';
+import { FloorNumbers } from './api/FloorNumbers';
 
 
 export default class CreateTimeSlotCreateFloorArea extends React.Component {
@@ -15,10 +16,14 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
   handleOnSubmit(e){
     e.preventDefault();
     let newfloorarea = {};
-    newfloorarea["floorareaname"] = e.target.elements.floorareaname.value;
-    newfloorarea["floorareancode"] = e.target.elements.floorareancode.value;    
+    newfloorarea["floorname"] = e.target.elements.floorname.value;
+    newfloorarea["floorcode"] = e.target.elements.floorncode.value;    
     newfloorarea["isActive"] = true;
-    FloorAreas.insert(newfloorarea);
+    FloorNumbers.insert(newfloorarea,function(err,doc){
+      if(!err){
+        console.log("saved floor", doc);
+      }
+    });
     console.log(newfloorarea);
     this.setState((prevState) => {
       return {
@@ -36,8 +41,8 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
       <div>
         <div className="row">
           <form onSubmit={this.handleOnSubmit} >
-            <input type="text" placeholder="Floor Area Name" name="floorareaname"/>
-            <input type="text" placeholder="Floor Area Code" name="floorareancode"/>
+            <input type="text" placeholder="Floor Name" name="floorname"/>
+            <input type="text" placeholder="Floor Code" name="floorncode"/>
             <button 
                 className="waves-effect waves-light btn-small" 
                 style={{margin:10}}                
@@ -51,16 +56,16 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
               <table>
                 <thead>
                   <tr>
-                      <th>Floor Area Name</th>
-                      <th>Floor Area Code</th>
+                      <th>Floor Name</th>
+                      <th>Floor Code</th>
                       <th>Action</th>                      
                   </tr>
                 </thead>
                 <tbody>   
                   {this.state.floorareas.map((floorarea,index) => (
                   <tr key={index}>
-                    <td>{floorarea.floorareaname}</td>
-                    <td>{floorarea.floorareancode}</td>
+                    <td>{floorarea.floorname}</td>
+                    <td>{floorarea.floorcode}</td>
                     <td>
                       <button>
                         <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableFloorArea} >label_off</i>

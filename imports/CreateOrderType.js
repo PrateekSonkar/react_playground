@@ -1,4 +1,5 @@
 import React from 'react';
+import { OrderTypes } from './api/OrderTypes';
 
 
 export default class CreateOrderType extends React.Component {
@@ -16,7 +17,9 @@ export default class CreateOrderType extends React.Component {
     console.log(e.target.elements.taxname);
     let neworderttypeRate = {};
     neworderttypeRate["orderttypename"] = e.target.elements.orderttypename.value;
-    neworderttypeRate["orderttypecode"] = e.target.elements.orderttypecode.value;    
+    neworderttypeRate["orderttypecode"] = e.target.elements.orderttypecode.value;  
+    neworderttypeRate["isActive"] = true;
+    OrderTypes.insert(neworderttypeRate)  
     console.log(neworderttypeRate);
     this.setState((prevState) => {
       return {

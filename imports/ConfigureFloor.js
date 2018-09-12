@@ -1,4 +1,5 @@
 import React from 'react';
+import {FloorConfigurations} from './api/FloorConfigurations';
 
 
 export default class ConfigureFloor extends React.Component{
@@ -15,6 +16,7 @@ export default class ConfigureFloor extends React.Component{
     this.handleOnChangeArea = this.handleOnChangeArea.bind(this);
     this.handleOnChangeTableSet = this.handleOnChangeTableSet.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.disableFloorConfiguration = this.disableFloorConfiguration.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +31,9 @@ export default class ConfigureFloor extends React.Component{
     newFloorConfig["floornumer"] = this.state.floornumber;
     newFloorConfig["floorarea"] = this.state.floorarea;
     newFloorConfig["tableset"] = this.state.tableset;
-    newFloorConfig["quantity"] = e.target.elements.quantity.value;
+    newFloorConfig["count"] = e.target.elements.count.value;
+    newFloorConfig["isActive"] = true;
+    FloorConfigurations.insert(newFloorConfig);
     console.log("handle Submit ", newFloorConfig);
     this.setState((prevState) => {
       return{
@@ -55,6 +59,10 @@ export default class ConfigureFloor extends React.Component{
     console.log("handle on change ",e.target.value)
     let value = e.target.value;
     this.setState((prevState) => ({tableset:value}))
+  }
+
+  disableFloorConfiguration(value){
+    console.log("disableFloorConfiguration ", value);
   }
 
   render(){
@@ -89,7 +97,7 @@ export default class ConfigureFloor extends React.Component{
             </select>
             <label>Select TableSet to Configure</label>
           </div>
-          <input type="text" placeholder="Number Type Code" name="quantity"/>
+          <input type="text" placeholder="Number Type Code" name="count"/>
           <button className="waves-effect waves-light btn">
               Add
           </button>
@@ -103,6 +111,7 @@ export default class ConfigureFloor extends React.Component{
                   <th>Area</th>
                   <th>Table Set</th>
                   <th>Quantity</th>
+                  <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -111,17 +120,17 @@ export default class ConfigureFloor extends React.Component{
                   <td>{floordetail.floorarea}</td>
                   <td>{floordetail.floorarea}</td>
                   <td>{floordetail.tableset}</td>
-                  <td>{floordetail.quantity}</td>
+                  <td>{floordetail.count}</td>
+                  <td>
+                    <button>
+                      <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableFloorArea} >label_off</i>
+                    </button>
+                  </td>
                 </tr>
               )) }              
             </tbody>
           </table>          
         </div> 
-        <div className="row">
-          <a className="waves-effect waves-light btn">
-              Save Detail
-          </a>
-        </div>
       </div>
     )
   }

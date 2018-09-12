@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { TimeSlots } from './api/TimeSlots'
 
 export default class CreateTimeSlot extends React.Component {
   constructor(props){
@@ -16,7 +16,9 @@ export default class CreateTimeSlot extends React.Component {
     let newtimeslot = {};
     newtimeslot["timeslotname"] = e.target.elements.timeslotname.value;
     newtimeslot["timeslotfrom"] = e.target.elements.timeslotfrom.value;    
-    newtimeslot["timeslotto"] = e.target.elements.timeslotto.value;    
+    newtimeslot["timeslotto"] = e.target.elements.timeslotto.value;
+    newtimeslot["isActive"] - true;
+    TimeSlots.insert(newtimeslot);    
     console.log(newtimeslot);
     this.setState((prevState) => {
       return {
