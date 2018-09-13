@@ -93,7 +93,7 @@ export default class POSView extends React.Component{
         let updatedItem = update(prevState.currentorderlist[isAvailable],{value:{quantity:{$set:prevState.currentorderlist[isAvailable].value.quantity + 1}}});
         let obj = Object.assign({},prevState);        
         delete obj.currentorderlist[isAvailable];
-        obj.currentorderlist[isAvailable] = updatedItem;        
+        obj.currentorderlist[isAvailable] = updatedItem;   
         return {
           currentorderlist : obj.currentorderlist
         }
