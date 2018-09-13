@@ -1,4 +1,6 @@
 import React from 'react';
+import {Taxes} from './api/Taxes';
+import {MenuItems} from './api/MenuItems';
 
 export default class CreateMenu extends React.Component {
   constructor(props){
@@ -7,24 +9,23 @@ export default class CreateMenu extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this)
     this.state = {
       error:undefined,
-      taxrate : 0
+      taxrates : [] 
     }
   }
 
   componentDidMount() {
-    let elems = document.querySelectorAll("select");
-    console.log(elems);
-    let instance = M.FormSelect.init(elems);
+    let taxes = Taxes.find({isEnabled:true}).fetch();
+    console.log("taxes ", taxes);
+    this.setState((prevState) => {
+      return{
+        taxrates:taxes
+      }
+    });
   }
 
   handleOnChange(e){
     let value = e.target.value;
     console.log("andle On change ", value);
-    // this.setState((prevState) => {
-    //   return{
-    //     "taxrate":value
-    //   }
-    // })
   }
 
   handleOnClick(e){
@@ -45,7 +46,9 @@ export default class CreateMenu extends React.Component {
     menuItem["subcategory"] = e.target.elements.subcategory.value;
     menuItem["itemname"] = e.target.elements.itemname.value;
     menuItem["menurate"] = e.target.elements.menurate.value;
-    menuItem["tax"] = [];
+    menuItem["isActive"] = true;
+    menuItem["istaxincluded"] = document.querySelector('input[name="istaxincluded"]:checked').value === "true" ? true : false; 
+    menuItem["taxes"] = [];
     let checkedBoxes = document.querySelectorAll('input[name=tax]:checked');
     checkedBoxes.forEach(function(nodeElem,index){
       let key = nodeElem.attributes.rel.value
@@ -53,9 +56,9 @@ export default class CreateMenu extends React.Component {
       let temp = {};
       temp[key] = value
       console.log("from loop ", key, value);
-      menuItem["tax"].push(temp)
+      menuItem["taxes"].push(temp)
     });    
-    console.log(menuItem);
+    MenuItems.insert(menuItem);
   }
   render(){
     return(
@@ -68,19 +71,31 @@ export default class CreateMenu extends React.Component {
           <input type="text" name="subcategory" placeholder="Sub Category"/>
           <input type="text" name="itemname" placeholder="Item Name"/>
           <input type="text" name="menurate" placeholder="Menu Rate"/>
-          <div className="row" >
-            <div>
+          <div className="row">
+            <div><b>Tax status on Menu rates</b></div>
+            <div className="col s6 m2">
               <label>
-                <input type="checkbox" name="tax" value={2} rel="CGST"/>
-                <span>Red</span>
+                <input name="istaxincluded" type="radio" value={true}/>
+                <span>Tax Included</span>
               </label>
             </div>
-            <div>
+            <div className="col s6 m2">
               <label>
-                <input type="checkbox" name="tax" value={5} rel="SGST"/>
-                <span>Yellow</span>
+                <input name="istaxincluded" type="radio" value={false}/>
+                <span>Tax Exluded</span>
               </label>
             </div>
+          </div>
+          <div className="row">
+            <div><b>Select applicable taxes</b></div>
+            {this.state.taxrates.map((tax,index) => (
+              <div className="col m2 s12" key={tax._id}>
+                <label>
+                  <input type="checkbox" name="tax" value={tax.taxpercentage} rel={tax.taxcode}/>
+                  <span>{tax.taxname}</span>
+                </label>
+              </div>
+            ))}
           </div>
           
           <button className="waves-effect waves-light btn">Add Option</button>

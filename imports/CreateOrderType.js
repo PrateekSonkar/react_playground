@@ -1,5 +1,6 @@
 import React from 'react';
 import { OrderTypes } from './api/OrderTypes';
+import ViewOrderTypes from './ViewOrderTypes';
 
 
 export default class CreateOrderType extends React.Component {
@@ -10,6 +11,15 @@ export default class CreateOrderType extends React.Component {
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.disableOrderTypeConfig = this.disableOrderTypeConfig.bind(this);
+  }
+
+  componentDidMount(){
+    let ordertypes = OrderTypes.find().fetch();
+    this.setState((prevState) => {
+      return {
+        ordertypes:ordertypes
+      }
+    });
   }
 
   handleOnSubmit(e){
@@ -48,30 +58,8 @@ export default class CreateOrderType extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        <div className="row">          
-              <table>
-                <thead>
-                  <tr>
-                      <th>Order Type</th>
-                      <th>Order Type Code</th>
-                      <th>Action</th>                      
-                  </tr>
-                </thead>
-                <tbody>   
-                  {this.state.ordertypes.map((ordertype,index) => (
-                  <tr key={index}>
-                    <td>{ordertype.orderttypename}</td>
-                    <td>{ordertype.orderttypecode}</td>
-                    <td>
-                      <button>
-                        <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableOrderTypeConfig} >label_off</i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
+        <ViewOrderTypes ordertypes={this.state.ordertypes}  disableOrderTypeConfig={this.disableOrderTypeConfig}/>
+        
       </div>
     )
   }

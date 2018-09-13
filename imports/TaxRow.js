@@ -18,11 +18,10 @@ export default class TaxRow extends React.Component{
         <th>{this.props.taxcode}</th>
         <th>{this.props.taxpercentage}</th>
         <th>
-          <button>
-            <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableTax} rel={this.props.taxcode}>
-              label_off
-            </i>
-          </button>
+          <a className="waves-effect waves-light btn" onClick={()=>{this.props.disableTax(this.props.rel)}}>
+          <i className="material-icons white-text left">{this.props.taxstatus ? "label" : "label_off"}</i>
+            {this.props.taxstatus ? "Disable" : "Enable"}
+          </a>
         </th>                      
       </tr>
     )

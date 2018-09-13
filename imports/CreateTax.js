@@ -2,6 +2,7 @@ import React from 'react';
 import TaxRow from './TaxRow';
 import {Taxes} from './api/Taxes';
 import { Tracker } from 'meteor/tracker';
+import _lodash from 'lodash';
 
 export default class CreateTax extends React.Component {
   constructor(props){
@@ -13,8 +14,16 @@ export default class CreateTax extends React.Component {
     this.disableTax = this.disableTax.bind(this);
   }
 
+  componentDidMount(){
+    let taxrates = Taxes.find().fetch();
+    this.setState((prevState) => {
+      return {
+        taxrates : taxrates
+      }
+    });  
+  }
   
-  handleOnSubmit(e){
+  handleOnSubmit = (e) => {
     e.preventDefault();
     console.log(e.target.elements.taxname);
     let newTaxRate = {};
@@ -31,8 +40,20 @@ export default class CreateTax extends React.Component {
     });
   }
 
-  disableTax(taxcode){
+  disableTax = (taxcode) => {
     console.log("Tax Disabled : ", taxcode);
+    let index = _lodash.findIndex(this.state.taxrates,{_id:taxcode});
+    if(index > -1){
+      let toggledState = !this.state.taxrates[index].isEnabled;
+      Taxes.update({_id:taxcode},{$set:{isEnabled:toggledState}});
+      this.setState((prevState) => {
+        prevState.taxrates[index].isEnabled = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          taxrates:obj.taxrates
+        }
+      });  
+    }
   }
 
   render(){
@@ -63,7 +84,7 @@ export default class CreateTax extends React.Component {
               </tr>
             </thead>
             <tbody>   
-              {this.state.taxrates.map((taxrate,index) => <TaxRow key={index} taxname={taxrate.taxname} taxcode={taxrate.taxcode} taxpercentage={taxrate.taxpercentage} disableTax={this.disableTax}  /> )}
+              {this.state.taxrates.map((taxrate,index) => <TaxRow key={taxrate._id} taxstatus={taxrate.isEnabled} taxname={taxrate.taxname} taxcode={taxrate.taxcode} taxpercentage={taxrate.taxpercentage} disableTax={this.disableTax}  rel={taxrate._id} /> )}
             </tbody>
           </table>
         </div>
