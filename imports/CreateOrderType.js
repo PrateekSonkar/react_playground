@@ -66,26 +66,46 @@ export default class CreateOrderType extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className="container">
         <div className="row">
-          <form onSubmit={this.handleOnSubmit} >
-            <input type="text" placeholder="Order Type Name" name="orderttypename"/>
-            <input type="text" placeholder="Order Type Code" name="orderttypecode"/>
-            <button 
-                className="waves-effect waves-light btn-small" 
-                style={{margin:10}}                
-              >
-                Create
-              </button>
-          </form>
+          <div className="col s12 m3" />
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center-align"><b>Create Order Type</b></span>  
+                <div>
+                  <form onSubmit={this.handleOnSubmit} >
+                    <div className="input-field">
+                      <input type="text" id="orderttypename" name="orderttypename" />
+                      <label htmlFor="orderttypename">Order Type Name</label>
+                    </div>
+                    <div className="input-field">
+                      <input type="text" id="orderttypecode" name="orderttypecode" />
+                      <label htmlFor="orderttypecode">Order Type Code</label>
+                    </div>
+                    <div className="center-align">
+                      <button 
+                          className="waves-effect waves-light btn-small deep-orange" 
+                          style={{margin:10}}                
+                        >
+                          Create
+                        </button>
+                    </div>  
+                  </form>
+                </div>
+              </div>
+            </div>    
+          </div>
+          <div className="col s12 m3" />
         </div>
         <div className="row"></div>
-        <ViewOrderTypes 
-          ordertypes={this.state.ordertypes}  
-          updateState={this.updateState}
-          toggleStatus={this.toggleStatus}
-
-        />
+        <div className="row">
+          <ViewOrderTypes 
+            ordertypes={this.state.ordertypes}  
+            updateState={this.updateState}
+            toggleStatus={this.toggleStatus}
+          />
+        </div>
         
       </div>
     )

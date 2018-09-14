@@ -82,49 +82,84 @@ export default class CreateMenu extends React.Component {
 
   render(){
     return(
-      <div>
-        {this.state.error && <p>{this.state.error}</p> }
-        <form onSubmit={this.handleOnSubmit}>
-          <input type="text" name="group" placeholder="Group"/>
-          <input type="text" name="subgroup" placeholder="Sub Group"/>
-          <input type="text" name="category" placeholder="Category"/>
-          <input type="text" name="subcategory" placeholder="Sub Category"/>
-          <input type="text" name="itemname" placeholder="Item Name"/>
-          <input type="text" name="menurate" placeholder="Menu Rate"/>
-          <div className="row">
-            <div><b>Tax status on Menu rates</b></div>
-            <div className="col s6 m2">
-              <label>
-                <input name="istaxincluded" type="radio" value={true}/>
-                <span>Tax Included</span>
-              </label>
-            </div>
-            <div className="col s6 m2">
-              <label>
-                <input name="istaxincluded" type="radio" value={false}/>
-                <span>Tax Exluded</span>
-              </label>
-            </div>
-          </div>
-          <div className="row">
-            <div><b>Select applicable taxes</b></div>
-            {this.state.taxrates.map((tax,index) => (
-              <div className="col m2 s12" key={tax._id}>
-                <label>
-                  <input type="checkbox" name="tax" value={tax.taxpercentage} rel={tax.taxcode}/>
-                  <span>{tax.taxname}</span>
-                </label>
-              </div>
-            ))}
-          </div>
-          <button className="waves-effect waves-light btn">Add Option</button>
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m3" />
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center-align"><b>Create Menu</b></span>
+                {this.state.error && <p>{this.state.error}</p> }
+                <form onSubmit={this.handleOnSubmit}>
+                  <div className="input-field">
+                    <input type="text" id="group" name="group" />
+                    <label htmlFor="group">Group</label>
+                  </div>
+                  <div className="input-field">
+                    <input type="text" id="subgroup" name="subgroup" />
+                    <label htmlFor="subgroup">Sub Group</label>
+                  </div>
+                  <div className="input-field">
+                    <input type="text" id="category" name="category" />
+                    <label htmlFor="category">Category</label>
+                  </div>
+                  <div className="input-field">
+                    <input type="text" id="subcategory" name="subcategory" />
+                    <label htmlFor="subcategory">Sub Category</label>
+                  </div>
+                  <div className="input-field">
+                    <input type="text" id="itemname" name="itemname" />
+                    <label htmlFor="itemname">Item Name</label>
+                  </div>
+                  <div className="input-field">
+                    <input type="text" id="menurate" name="menurate" />
+                    <label htmlFor="menurate">Menu Rate</label>
+                  </div>
+                  <div className="row">
+                    <div><b>Tax status on Menu rates</b></div>
+                    <div className="col s6 m3">
+                      <label>
+                        <input name="istaxincluded" type="radio" value={true}/>
+                        <span>Tax Included</span>
+                      </label>
+                    </div>
+                    <div className="col s6 m3">
+                      <label>
+                        <input name="istaxincluded" type="radio" value={false}/>
+                        <span>Tax Exluded</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div><b>Select applicable taxes</b></div>
+                    {this.state.taxrates.map((tax,index) => (
+                      <div className="col m3 s12" key={tax._id}>
+                        <label>
+                          <input type="checkbox" name="tax" value={tax.taxpercentage} rel={tax.taxcode}/>
+                          <span>{tax.taxname}</span>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="center-align">
+                    <button className="waves-effect waves-light btn deep-orange">Add Menu Item</button>
+                  </div>
+                  
 
-        </ form>
+                </ form>
+              </div>
+            </div>    
+            
+          </div>
+          <div className="col s12 m3" />
+        </div>
+        <div className="row">
         <ViewMenuItems 
           menuitems = {this.state.menuitems}
           updateState = {this.updateState}
           updateStateTax = {this.updateStateTax}
         />
+        </div>
       </div>
     )
   }

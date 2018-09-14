@@ -67,26 +67,50 @@ export default class CreateTax extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className="container">
         <div className="row">
-          <form onSubmit={this.handleOnSubmit} >
-            <input type="text" placeholder="Tax Name" name="taxname"/>
-            <input type="text" placeholder="Tax Code" name="taxcode" />
-            <input type="text" placeholder="Tax Percentage" name="taxpercentage" />
-            <button 
-                className="waves-effect waves-light btn-small" 
-                style={{margin:10}}                
-              >
-                Create
-              </button>
-          </form>
+          <div className="col s12 m3" />
+          <div className="col s12 m6">
+            <div className="card">
+                <div className="card-content">
+                  <span className="card-title center-align"><b>Create Tax</b></span>
+                  <div>
+                  <form onSubmit={this.handleOnSubmit} >
+                    <div className="input-field">
+                      <input type="text" id="taxname" name="taxname" />
+                      <label htmlFor="taxname">Tax Name</label>
+                    </div>
+                    <div className="input-field">
+                      <input type="text" id="taxcode" name="taxcode" />
+                      <label htmlFor="taxcode">Tax Code</label>
+                    </div>              
+                    <div className="input-field">
+                      <input type="text" id="taxpercentage" name="taxpercentage" />
+                      <label htmlFor="taxpercentage">Tax Percentage</label>
+                    </div>
+                    <div className="center-align">
+                      <button 
+                          className="waves-effect waves-light btn-small deep-orange" 
+                          style={{margin:10}}                
+                        >
+                          Create
+                        </button>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+            </div>      
+          </div>
+          <div className="col s12 m3" />
         </div>
         <div className="row"></div>
-        <TaxRow 
-          taxrates = {this.state.taxrates}
-          toggledState = {this.toggledState}
-          updateState = {this.updateState}
-        />
+        <div className="row">
+          <TaxRow 
+            taxrates = {this.state.taxrates}
+            toggledState = {this.toggledState}
+            updateState = {this.updateState}
+          />
+        </div>
       </div>
     )
   }

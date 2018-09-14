@@ -127,50 +127,74 @@ export default class ConfigureFloor extends React.Component{
 
   render(){
     return(
-      <div>
-        <form onSubmit={this.handleOnSubmit} >
-          <div className="input-field col s12">
-            <select value="none" onChange={this.handleOnChangeFloor}>
-              <option value="none">Choose your option</option>
-              <option value="floor2">F Floor 2</option>
-              <option value="floor3">F Floor 3</option>
-            </select>
-            <label>Select Floor to Configure</label>
+      <div className="container">
+        <div className="row">
+            <div className="col s12 m3" />
+            <div className="col s12 m6">
+              <div className="card">
+                <div className="card-content">
+                  <span className="card-title center-align"><b>Configure Floor</b></span>
+                  <div>
+                    <form onSubmit={this.handleOnSubmit} >
+                      <div className="input-field">
+                        <input type="text" id="count" name="count" />
+                        <label htmlFor="count">Count</label>
+                      </div>
+                      <div className="input-field col s12">
+                        <select value="none" onChange={this.handleOnChangeFloor}>
+                          <option value="none">Choose your option</option>
+                          <option value="floor2">F Floor 2</option>
+                          <option value="floor3">F Floor 3</option>
+                        </select>
+                        <label>Select Floor to Configure</label>
+                      </div>
+                      <div className="input-field col s12">
+                        <select value="none" onChange={this.handleOnChangeArea}>
+                          <option value="none" disabled >Choose your option</option>
+                          <option value="bar">Bar</option>
+                          <option value="smoking">Smoking</option>
+                          <option value="nonsmoking">Non Smoking</option>
+                          <option value="family">Family</option>
+                        </select>
+                        <label>Select Area to Configure</label>
+                      </div>        
+                      <div className="input-field col s12">
+                        <select value="none" onChange={this.handleOnChangeTableSet}>
+                          <option value="none" >Choose your option</option>
+                          <option value="tc2">Table & 2 Chair</option>
+                          <option value="tc4">Table & 4 Chair</option>
+                          <option value="tc6">Table & 6 Chair</option>
+                        </select>
+                        <label>Select TableSet to Configure</label>
+                      </div>
+                      <div className="center-align">
+                        <button 
+                            className="waves-effect waves-light btn-small deep-orange" 
+                            style={{margin:10}}                
+                          >
+                          Create
+                        </button>
+                      </div>  
+                      
+                    </form>
+                  </div>
+                </div>
+              </div>  
+            </div>
+            <div className="col s12 m3" />
+          <div className="row"></div>
+          <div className="row">
+            <ViewFloorConfigurations 
+              floorplan = {this.state.floorplan}
+              updateState = {this.updateState}
+              toggledState = {this.toggleStatus}
+              flooroptions = {this.state.flooroptions}
+              areaoptions = {this.state.areaoptions}
+              tablesetoptions = {this.state.tablesetoptions}
+              updateDropDown = {this.updateDropDown}
+            />
           </div>
-          <div className="input-field col s12">
-            <select value="none" onChange={this.handleOnChangeArea}>
-              <option value="none" disabled >Choose your option</option>
-              <option value="bar">Bar</option>
-              <option value="smoking">Smoking</option>
-              <option value="nonsmoking">Non Smoking</option>
-              <option value="family">Family</option>
-            </select>
-            <label>Select Area to Configure</label>
-          </div>        
-          <div className="input-field col s12">
-            <select value="none" onChange={this.handleOnChangeTableSet}>
-              <option value="none" >Choose your option</option>
-              <option value="tc2">Table & 2 Chair</option>
-              <option value="tc4">Table & 4 Chair</option>
-              <option value="tc6">Table & 6 Chair</option>
-            </select>
-            <label>Select TableSet to Configure</label>
-          </div>
-          <input type="text" placeholder="Number Type Code" name="count"/>
-          <button className="waves-effect waves-light btn">
-              Add
-          </button>
-        </form>
-        <div className="row"></div>
-        <ViewFloorConfigurations 
-          floorplan = {this.state.floorplan}
-          updateState = {this.updateState}
-          toggledState = {this.toggleStatus}
-          flooroptions = {this.state.flooroptions}
-          areaoptions = {this.state.areaoptions}
-          tablesetoptions = {this.state.tablesetoptions}
-          updateDropDown = {this.updateDropDown}
-        />
+        </div>
       </div>
     )
   }

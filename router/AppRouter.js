@@ -25,7 +25,7 @@ const AppRouter = () => {
       <Switch>
         <Route path="/" component={IndecisionApp} exact={true} />
         <Route path="/register" component={NewCustomerRegistration}  />
-        <Route path="/configure/:id" component={ConfigureRestaurant} />
+        <Route path="/configure" component={ConfigureRestaurant} />
         <Route path="/createmenu" component={CreateMenu} />
         <Route path="/pos" component={POSView} />
         <Route path="/createtax" component={CreateTax} />

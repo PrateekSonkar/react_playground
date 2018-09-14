@@ -60,26 +60,50 @@ export default class CreateTimeSlot extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className="container">
         <div className="row">
-          <form onSubmit={this.handleOnSubmit} >
-            <input type="text" placeholder="Time Slot Name" name="timeslotname"/>
-            <input type="text" placeholder="Time Slot Start" name="timeslotfrom"/>
-            <input type="text" placeholder="Time Slot End" name="timeslotto"/>
-            <button 
-                className="waves-effect waves-light btn-small" 
-                style={{margin:10}}                
-              >
-                Create
-              </button>
-          </form>
+          <div className="col s12 m3" />
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center-align"><b>Create Time Slot</b></span>
+                <div>
+                  <form onSubmit={this.handleOnSubmit} >
+                    <div className="input-field">
+                      <input type="text" id="timeslotname" name="timeslotname" />
+                      <label htmlFor="timeslotname">Time Slot Name</label>
+                    </div>
+                    <div className="input-field">
+                      <input type="text" id="timeslotfrom" name="timeslotfrom" />
+                      <label htmlFor="timeslotfrom">Time Slot Start</label>
+                    </div>
+                    <div className="input-field">
+                      <input type="text" id="timeslotto" name="timeslotto" />
+                      <label htmlFor="timeslotto">Time Slot End</label>
+                    </div>
+                    <div className="center-align">
+                      <button 
+                          className="waves-effect waves-light btn-small deep-orange" 
+                          style={{margin:10}}                
+                        >
+                          Create
+                      </button>
+                    </div>  
+                  </form>
+                </div>
+              </div>
+            </div>  
+          </div>
+          <div className="col s12 m3" />
         </div>
         <div className="row"></div>
-        <ViewTimeSlots 
-          timeslots={this.state.timeslots} 
-          toggleTimeSlotStatus={this.toggleTimeSlotStatus } 
-          updateState = {this.updateState}
-        />
+        <div className="row">
+          <ViewTimeSlots 
+            timeslots={this.state.timeslots} 
+            toggleTimeSlotStatus={this.toggleTimeSlotStatus } 
+            updateState = {this.updateState}
+          />
+        </div>
       </div>
     )
   }

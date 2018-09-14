@@ -59,21 +59,47 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className="container">
         <div className="row">
-          <form onSubmit={this.handleOnSubmit} >
-            <input type="text" placeholder="Floor Area Name" name="floorareaname"/>
-            <input type="text" placeholder="Floor Area Code" name="floorareancode"/>
-            <button 
-                className="waves-effect waves-light btn-small" 
-                style={{margin:10}}                
-              >
-                Create
-              </button>
-          </form>
+          <div className="col s12 m3" />
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center-align"><b>Create Floor Area</b></span>
+                <div>
+                  <form onSubmit={this.handleOnSubmit} >
+                    <div className="input-field">
+                      <input type="text" id="floorareaname" name="floorareaname" />
+                      <label htmlFor="floorareaname">Floor Area Name</label>
+                    </div>
+                    <div className="input-field">
+                      <input type="text" id="floorareancode" name="floorareancode" />
+                      <label htmlFor="floorareancode">Floor Area Code</label>
+                    </div>
+                    <div className="center-align">
+                      <button 
+                          className="waves-effect waves-light btn-small deep-orange" 
+                          style={{margin:10}}                
+                        >
+                          Create
+                        </button>
+                    </div>  
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col s12 m3" />
         </div>
         <div className="row"></div> 
-        <ViewFloorAreas floorareas={this.state.floorareas} disableFloorArea={this.disableFloorArea} updateStateWithNewDoc={this.updateStateWithNewDoc} />       
+        <div className="row">
+          <ViewFloorAreas 
+            floorareas={this.state.floorareas} 
+            disableFloorArea={this.disableFloorArea} 
+            updateStateWithNewDoc={this.updateStateWithNewDoc} 
+          />       
+        </div> 
+        
       </div>
     )
   }
