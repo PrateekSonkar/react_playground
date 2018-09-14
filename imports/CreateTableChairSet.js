@@ -1,5 +1,7 @@
 import React from 'react';
+import _lodash from 'lodash';
 import { TableSets } from './api/TableSets';
+import ViewTableChairSets from './ViewTableChairSets'
 
 export default class CreateTableChairSet extends React.Component {
   constructor(props){
@@ -8,10 +10,20 @@ export default class CreateTableChairSet extends React.Component {
       tablechairsets : []
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.disableTableChairSet = this.disableTableChairSet.bind(this);
+    this.toggleStatus = this.toggleStatus.bind(this);
+    this.updateState = this.updateState.bind(this);
   }
 
-  handleOnSubmit(e){
+  componentWillMount(){
+    let tablechairsets = TableSets.find().fetch();
+    this.setState(prevState => {
+      return{
+        tablechairsets:tablechairsets
+      }
+    })
+}
+
+  handleOnSubmit = (e) => {
     e.preventDefault();
     let newtcset = {};
     newtcset["tcsetname"] = e.target.elements.tcsetname.value;
@@ -20,16 +32,30 @@ export default class CreateTableChairSet extends React.Component {
     newtcset["tccode"] = e.target.elements.tccode.value;
     newtcset["isActive"] = true;
     TableSets.insert(newtcset);
-    console.log(newtcset);
-    this.setState((prevState) => {
-      return {
-        tablechairsets : prevState.tablechairsets.concat([newtcset])
-      }
-    });
   }
 
-  disableTableChairSet(code){
-    console.log("Disabled disableFloorArea: ", code);
+  toggleStatus = (code) => {
+    console.log("Disabled toggleStatus: ", code);
+    let index = _lodash.findIndex(this.state.tablechairsets,{_id:code});
+    if(index > -1){
+      let toggledState = !this.state.tablechairsets[index].isActive;
+      TableSets.update({_id:code},{$set:{isActive:toggledState}})
+      this.setState((prevState) => {
+        prevState.tablechairsets[index].isActive = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          tablechairsets:obj.tablechairsets
+        }
+      });
+    }
+  }
+
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        tablechairsets : obj
+      }
+    });
   }
 
   render(){
@@ -51,34 +77,11 @@ export default class CreateTableChairSet extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        <div className="row">          
-              <table>
-                <thead>
-                  <tr>
-                      <th>Set Name</th>
-                      <th>Set Code</th>
-                      <th>No of Table</th>
-                      <th>No of Chairs</th>
-                      <th>Action</th>                      
-                  </tr>
-                </thead>
-                <tbody>   
-                  {this.state.tablechairsets.map((tablechairset,index) => (
-                  <tr key={index}>
-                    <td>{tablechairset.tcsetname}</td>
-                    <td>{tablechairset.tccode}</td>
-                    <td>{tablechairset.tcsettable}</td>
-                    <td>{tablechairset.tcsetchairs}</td>
-                    <td>
-                      <button>
-                        <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableTableChairSet} >label_off</i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
+        <ViewTableChairSets 
+          tablechairsets={this.state.tablechairsets} 
+          updateState = {this.updateState}
+          toggleStatus = {this.toggleStatus}
+        />
       </div>
     )
   }

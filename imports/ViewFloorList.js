@@ -1,6 +1,4 @@
 import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import { Tracker } from 'meteor/tracker'
 import { FloorNumbers } from './api/FloorNumbers';
 
 const ViewFloorList = (props) => {  
@@ -13,7 +11,7 @@ const ViewFloorList = (props) => {
       }
     });
   }  
-  console.log("Props ,", props)
+  
   return (
     <div className="row">          
       <table>

@@ -1,5 +1,7 @@
 import React from 'react';
+import _lodash from 'lodash';
 import { FloorAreas } from './api/FloorAreas';
+import ViewFloorAreas from './ViewFloorAreas';
 
 
 export default class CreateTimeSlotCreateFloorArea extends React.Component {
@@ -10,6 +12,16 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.disableFloorArea = this.disableFloorArea.bind(this);
+    this.updateStateWithNewDoc = this.updateStateWithNewDoc.bind(this);
+  }
+
+  componentDidMount(){
+    let floorareas = FloorAreas.find().fetch();
+    this.setState((prevState) => {
+      return {
+        floorareas:floorareas
+      }
+    });
   }
 
   handleOnSubmit(e){
@@ -19,16 +31,30 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
     newfloorarea["floorareancode"] = e.target.elements.floorareancode.value;    
     newfloorarea["isActive"] = true;
     FloorAreas.insert(newfloorarea);
-    console.log(newfloorarea);
-    this.setState((prevState) => {
-      return {
-        floorareas : prevState.floorareas.concat([newfloorarea])
-      }
-    });
   }
 
-  disableFloorArea(code){
+  disableFloorArea = (code) => {
     console.log("Disabled disableFloorArea: ", code);
+    let index = _lodash.findIndex(this.state.floorareas,{_id:code});
+    if(index > -1){
+      let toggledState = !this.state.floorareas[index].isActive;
+      FloorAreas.update({_id:code},{$set:{isActive:toggledState}});
+      this.setState((prevState) => {
+        prevState.floorareas[index].isActive = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          floorareas:obj.floorareas
+        }
+      });  
+    }
+  }
+
+  updateStateWithNewDoc = (floorareas) => {
+    this.setState(prevState => {
+      return{
+        floorareas:floorareas
+      }
+    });
   }
 
   render(){
@@ -46,31 +72,8 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
               </button>
           </form>
         </div>
-        <div className="row"></div>
-        <div className="row">          
-              <table>
-                <thead>
-                  <tr>
-                      <th>Floor Area Name</th>
-                      <th>Floor Area Code</th>
-                      <th>Action</th>                      
-                  </tr>
-                </thead>
-                <tbody>   
-                  {this.state.floorareas.map((floorarea,index) => (
-                  <tr key={index}>
-                    <td>{floorarea.floorareaname}</td>
-                    <td>{floorarea.floorareancode}</td>
-                    <td>
-                      <button>
-                        <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableFloorArea} >label_off</i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
+        <div className="row"></div> 
+        <ViewFloorAreas floorareas={this.state.floorareas} disableFloorArea={this.disableFloorArea} updateStateWithNewDoc={this.updateStateWithNewDoc} />       
       </div>
     )
   }

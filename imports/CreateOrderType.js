@@ -1,4 +1,5 @@
 import React from 'react';
+import _lodash from 'lodash';
 import { OrderTypes } from './api/OrderTypes';
 import ViewOrderTypes from './ViewOrderTypes';
 
@@ -10,7 +11,8 @@ export default class CreateOrderType extends React.Component {
       ordertypes : []
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.disableOrderTypeConfig = this.disableOrderTypeConfig.bind(this);
+    this.updateState = this.updateState.bind(this);
+    this.toggleStatus = this.toggleStatus.bind(this);
   }
 
   componentDidMount(){
@@ -38,8 +40,28 @@ export default class CreateOrderType extends React.Component {
     });
   }
 
-  disableOrderTypeConfig(code){
-    console.log("Disabled disableOrderTypeConfig: ", code);
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        ordertypes : obj
+      }
+    });
+  }
+
+  toggleStatus = (code) => {
+    console.log("Disabled disableFloorArea: ", code);
+    let index = _lodash.findIndex(this.state.ordertypes,{_id:code});
+    if(index > -1){
+      let toggledState = !this.state.ordertypes[index].isActive;
+      OrderTypes.update({_id:code},{$set:{isActive:toggledState}})
+      this.setState((prevState) => {
+        prevState.ordertypes[index].isActive = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          ordertypes:obj.ordertypes
+        }
+      });  
+    }
   }
 
   render(){
@@ -58,7 +80,12 @@ export default class CreateOrderType extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        <ViewOrderTypes ordertypes={this.state.ordertypes}  disableOrderTypeConfig={this.disableOrderTypeConfig}/>
+        <ViewOrderTypes 
+          ordertypes={this.state.ordertypes}  
+          updateState={this.updateState}
+          toggleStatus={this.toggleStatus}
+
+        />
         
       </div>
     )

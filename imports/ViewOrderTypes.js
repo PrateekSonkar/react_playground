@@ -1,6 +1,16 @@
 import React from 'react';
+import { OrderTypes } from './api/OrderTypes';
 
 const ViewOrderTypes = (props) =>{
+  if(Meteor.isClient){
+    Tracker.autorun(function(){
+      let ordertypes = OrderTypes.find().fetch();
+      if(ordertypes.length > props.ordertypes.length){
+        console.log("New entry found");  
+        props.updateState(ordertypes)
+      }
+    });
+  }
   return(
     <div className="row">          
       <table>
@@ -17,8 +27,9 @@ const ViewOrderTypes = (props) =>{
             <td>{ordertype.orderttypename}</td>
             <td>{ordertype.orderttypecode}</td>
             <td>
-              <a className="waves-effect waves-light btn">
-                <i className="material-icons white-text" onClick={ () => {props.disableOrderTypeConfig(ordertype._id)}} >label_off</i>
+              <a className="waves-effect waves-light btn" onClick={() => {props.toggleStatus(ordertype._id)}} >
+                <i className="material-icons white-text left">{ordertype.isActive ? "label" : "label_off"}</i>
+                {ordertype.isActive ? "Disable" : "Enable"}
               </a>
             </td>
           </tr>

@@ -1,5 +1,8 @@
 import React from 'react';
-import { TimeSlots } from './api/TimeSlots'
+import _lodash from 'lodash';
+
+import { TimeSlots } from './api/TimeSlots';
+import ViewTimeSlots from './ViewTimeSlots';
 
 export default class CreateTimeSlot extends React.Component {
   constructor(props){
@@ -8,7 +11,17 @@ export default class CreateTimeSlot extends React.Component {
       timeslots : []
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.disableTimeSlot = this.disableTimeSlot.bind(this);
+    this.toggleTimeSlotStatus = this.toggleTimeSlotStatus.bind(this);
+    this.updateState = this.updateState.bind(this);
+  }
+
+  componentWillMount(){
+    let timeslots = TimeSlots.find().fetch();
+    this.setState(prevState => {
+      return{
+        timeslots:timeslots
+      }
+    })
   }
 
   handleOnSubmit(e){
@@ -17,18 +30,32 @@ export default class CreateTimeSlot extends React.Component {
     newtimeslot["timeslotname"] = e.target.elements.timeslotname.value;
     newtimeslot["timeslotfrom"] = e.target.elements.timeslotfrom.value;    
     newtimeslot["timeslotto"] = e.target.elements.timeslotto.value;
-    newtimeslot["isActive"] - true;
-    TimeSlots.insert(newtimeslot);    
-    console.log(newtimeslot);
-    this.setState((prevState) => {
-      return {
-        timeslots : prevState.timeslots.concat([newtimeslot])
-      }
-    });
+    newtimeslot["isActive"] = true;
+    TimeSlots.insert(newtimeslot);        
   }
 
-  disableTimeSlot(code){
+  toggleTimeSlotStatus = (code) => {
     console.log("Disabled disableFloorArea: ", code);
+    let index = _lodash.findIndex(this.state.timeslots,{_id:code});
+    if(index > -1){
+      let toggledState = !this.state.timeslots[index].isActive;
+      TimeSlots.update({_id:code},{$set:{isActive:toggledState}})
+      this.setState((prevState) => {
+        prevState.timeslots[index].isActive = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          timeslots:obj.timeslots
+        }
+      });  
+    }
+  }
+
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        timeslots : obj
+      }
+    });
   }
 
   render(){
@@ -48,32 +75,11 @@ export default class CreateTimeSlot extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        <div className="row">          
-              <table>
-                <thead>
-                  <tr>
-                      <th>Time Slot Name</th>
-                      <th>Time Slot Starts</th>
-                      <th>Time Slot Ends</th>
-                      <th>Action</th>                      
-                  </tr>
-                </thead>
-                <tbody>   
-                  {this.state.timeslots.map((timeslot,index) => (
-                  <tr key={index}>
-                    <td>{timeslot.timeslotname}</td>
-                    <td>{timeslot.timeslotfrom}</td>
-                    <td>{timeslot.timeslotto}</td>
-                    <td>
-                      <button>
-                        <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableTimeSlot} >label_off</i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
+        <ViewTimeSlots 
+          timeslots={this.state.timeslots} 
+          toggleTimeSlotStatus={this.toggleTimeSlotStatus } 
+          updateState = {this.updateState}
+        />
       </div>
     )
   }

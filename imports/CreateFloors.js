@@ -1,5 +1,7 @@
 import React from 'react';
+import { Tracker } from 'meteor/tracker'
 import _lodash from 'lodash';
+
 import update from 'immutability-helper';
 
 import ViewFloorList from './ViewFloorList';
@@ -41,18 +43,7 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
     newfloorarea["floorname"] = e.target.elements.floorname.value;
     newfloorarea["floorcode"] = e.target.elements.floorncode.value;    
     newfloorarea["isActive"] = true;
-    FloorNumbers.insert(newfloorarea,function(err,doc){
-      if(!err){
-        console.log("saved floor", doc);
-        newfloorarea["_id"] = doc;        
-      }
-    });
-    // this.setState((prevState) => {
-    //   return {
-    //     floorareas : prevState.floorareas.concat([newfloorarea])
-    //   }
-    // });
-    // console.log(newfloorarea);    
+    FloorNumbers.insert(newfloorarea);
   }
 
   updateFloorStatus = (floorId) =>{
@@ -65,10 +56,9 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
       this.setState((prevState) => {
         prevState.floorareas[index].isActive = toggledState;
         let obj = Object.assign({},prevState);
-        this.updateStateWithNewDoc(obj.floorareas);
-        // return {
-        //   floorareas : obj.floorareas
-        // }
+        return {
+          floorareas : obj.floorareas
+        }
       });
     }
     //
@@ -106,7 +96,7 @@ export default class CreateTimeSlotCreateFloorArea extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        {this.state.floorareas.length > 0 && <ViewFloorList floordetails={this.state.floorareas} updateStateWithNewDoc={this.updateStateWithNewDoc} updateFloorStatus={this.updateFloorStatus} />}        
+        <ViewFloorList floordetails={this.state.floorareas} updateStateWithNewDoc={this.updateStateWithNewDoc} updateFloorStatus={this.updateFloorStatus} />
       </div>
     )
   }

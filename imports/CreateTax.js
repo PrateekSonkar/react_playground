@@ -11,7 +11,8 @@ export default class CreateTax extends React.Component {
       taxrates : []
     }
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.disableTax = this.disableTax.bind(this);
+    this.toggledState = this.toggledState.bind(this);
+    this.updateState = this.updateState.bind(this);
   }
 
   componentDidMount(){
@@ -40,7 +41,7 @@ export default class CreateTax extends React.Component {
     });
   }
 
-  disableTax = (taxcode) => {
+  toggledState = (taxcode) => {
     console.log("Tax Disabled : ", taxcode);
     let index = _lodash.findIndex(this.state.taxrates,{_id:taxcode});
     if(index > -1){
@@ -54,6 +55,14 @@ export default class CreateTax extends React.Component {
         }
       });  
     }
+  }
+
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        taxrates : obj
+      }
+    });
   }
 
   render(){
@@ -73,21 +82,11 @@ export default class CreateTax extends React.Component {
           </form>
         </div>
         <div className="row"></div>
-        <div className="row">          
-          <table>
-            <thead>
-              <tr>
-                  <th>Tax Name</th>
-                  <th>Tax Code</th>
-                  <th>Tax %age</th>
-                  <th>Action</th>                      
-              </tr>
-            </thead>
-            <tbody>   
-              {this.state.taxrates.map((taxrate,index) => <TaxRow key={taxrate._id} taxstatus={taxrate.isEnabled} taxname={taxrate.taxname} taxcode={taxrate.taxcode} taxpercentage={taxrate.taxpercentage} disableTax={this.disableTax}  rel={taxrate._id} /> )}
-            </tbody>
-          </table>
-        </div>
+        <TaxRow 
+          taxrates = {this.state.taxrates}
+          toggledState = {this.toggledState}
+          updateState = {this.updateState}
+        />
       </div>
     )
   }

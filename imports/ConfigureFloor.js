@@ -1,6 +1,7 @@
 import React from 'react';
+import _lodash from 'lodash';
 import {FloorConfigurations} from './api/FloorConfigurations';
-
+import ViewFloorConfigurations from './ViewFloorConfigurations';
 
 export default class ConfigureFloor extends React.Component{
   constructor(props){
@@ -10,18 +11,43 @@ export default class ConfigureFloor extends React.Component{
       floornumber:"",
       floorarea:"",
       tableset:"",
-      quantity:0
+      quantity:0,
+      flooroptions:[],
+      areaoptions:[],
+      tablesetoptions:[]
     }
     this.handleOnChangeFloor = this.handleOnChangeFloor.bind(this);
     this.handleOnChangeArea = this.handleOnChangeArea.bind(this);
     this.handleOnChangeTableSet = this.handleOnChangeTableSet.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.disableFloorConfiguration = this.disableFloorConfiguration.bind(this);
+    this.toggleStatus = this.toggleStatus.bind(this);
+    this.updateState = this.updateState.bind(this);
+    this.updateDropDown = this.updateDropDown.bind(this);
+    this.initializeDropDown = this.initializeDropDown.bind(this);
   }
 
+  // componentWillMount(){
+  //   let floornumber = FloorNumbers.find().fetch();
+  //   console.log("will mount",floornumber)
+  //   this.setState((prevState) => {
+  //     return{
+  //       flooroptions:floornumber
+  //     }
+  //   })
+  // }
+
   componentDidMount() {
+    this.initializeDropDown();
+    let floorconfig = FloorConfigurations.find().fetch();
+    this.setState(prevState => {
+      return {
+        floorplan : floorconfig
+      }
+    });
+  }
+
+  initializeDropDown(){
     let elems = document.querySelectorAll("select");
-    console.log(elems);
     let instances = M.FormSelect.init(elems);
   }
 
@@ -61,8 +87,42 @@ export default class ConfigureFloor extends React.Component{
     this.setState((prevState) => ({tableset:value}))
   }
 
-  disableFloorConfiguration(value){
-    console.log("disableFloorConfiguration ", value);
+  toggleStatus = (code) => {
+    console.log("Disabled disableFloorArea: ", code);
+    let index = _lodash.findIndex(this.state.floorplan,{_id:code});
+    if(index > -1){
+      let toggledState = !this.state.floorplan[index].isActive;
+      FloorConfigurations.update({_id:code},{$set:{isActive:toggledState}})
+      this.setState((prevState) => {
+        prevState.floorplan[index].isActive = toggledState;
+        let obj = Object.assign({},prevState);
+        return{
+          floorplan:obj.floorplan
+        }
+      });  
+    }
+  }
+
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        floorplan : obj
+      }
+    });
+  }
+
+  updateDropDown = (obj) => {
+    this.setState((prevState) => {
+      return {
+        flooroptions:obj.flooroptions,
+        areaoptions:obj.areaoptions,
+        tablesetoptions:obj.tablesetoptions
+      }
+    },()=>{this.initializeDropDown});
+  }
+
+  componentDidUpdate(){
+    this.initializeDropDown();
   }
 
   render(){
@@ -72,9 +132,8 @@ export default class ConfigureFloor extends React.Component{
           <div className="input-field col s12">
             <select value="none" onChange={this.handleOnChangeFloor}>
               <option value="none">Choose your option</option>
-              <option value="floor1">Floor 1</option>
-              <option value="floor2">Floor 2</option>
-              <option value="floor3">Floor 3</option>
+              <option value="floor2">F Floor 2</option>
+              <option value="floor3">F Floor 3</option>
             </select>
             <label>Select Floor to Configure</label>
           </div>
@@ -103,34 +162,15 @@ export default class ConfigureFloor extends React.Component{
           </button>
         </form>
         <div className="row"></div>
-        <div className="row">
-          <table>
-            <thead>
-              <tr>
-                  <th>Floor</th>
-                  <th>Area</th>
-                  <th>Table Set</th>
-                  <th>Quantity</th>
-                  <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.floorplan.map((floordetail,index) => (
-                <tr key={index}>
-                  <td>{floordetail.floorarea}</td>
-                  <td>{floordetail.floorarea}</td>
-                  <td>{floordetail.tableset}</td>
-                  <td>{floordetail.count}</td>
-                  <td>
-                    <button>
-                      <i className="material-icons circle white-text" style={{backgroundColor:"red"}} onClick={this.disableFloorArea} >label_off</i>
-                    </button>
-                  </td>
-                </tr>
-              )) }              
-            </tbody>
-          </table>          
-        </div> 
+        <ViewFloorConfigurations 
+          floorplan = {this.state.floorplan}
+          updateState = {this.updateState}
+          toggledState = {this.toggleStatus}
+          flooroptions = {this.state.flooroptions}
+          areaoptions = {this.state.areaoptions}
+          tablesetoptions = {this.state.tablesetoptions}
+          updateDropDown = {this.updateDropDown}
+        />
       </div>
     )
   }

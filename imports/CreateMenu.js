@@ -1,15 +1,18 @@
 import React from 'react';
 import {Taxes} from './api/Taxes';
 import {MenuItems} from './api/MenuItems';
+import ViewMenuItems from './ViewMenuItems'
 
 export default class CreateMenu extends React.Component {
   constructor(props){
     super(props);
     this.handleOnSubmit = this.handleOnSubmit.bind(this)
     this.handleOnClick = this.handleOnClick.bind(this)
+    this.updateState = this.updateState.bind(this)
     this.state = {
       error:undefined,
-      taxrates : [] 
+      taxrates : [],
+      menuitems : [] 
     }
   }
 
@@ -60,6 +63,23 @@ export default class CreateMenu extends React.Component {
     });    
     MenuItems.insert(menuItem);
   }
+
+  updateState = (obj) => {
+    this.setState((prevState) => {
+      return {
+        menuitems : obj
+      }
+    });
+  }
+
+  updateStateTax = (obj) => {
+    this.setState((prevState) => {
+      return {
+        taxrates : obj
+      }
+    });
+  }
+
   render(){
     return(
       <div>
@@ -97,10 +117,14 @@ export default class CreateMenu extends React.Component {
               </div>
             ))}
           </div>
-          
           <button className="waves-effect waves-light btn">Add Option</button>
+
         </ form>
-        
+        <ViewMenuItems 
+          menuitems = {this.state.menuitems}
+          updateState = {this.updateState}
+          updateStateTax = {this.updateStateTax}
+        />
       </div>
     )
   }

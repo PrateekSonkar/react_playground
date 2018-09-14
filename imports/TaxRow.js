@@ -1,29 +1,48 @@
 import React from 'react';
+import {Taxes} from './api/Taxes';
 
-export default class TaxRow extends React.Component{
-  constructor(props){
-    super(props);
-    this.disableTax = this.disableTax.bind(this);
+const TaxRow = (props) => {
+  if(Meteor.isClient){
+    Tracker.autorun(function(){
+      let  taxes = Taxes.find().fetch();
+      if(taxes.length > props.taxrates.length){
+        console.log("New entry found");  
+        props.updateState(taxes)
+      }
+    });
+  }
+  
+  return(
+    <div className="row">          
+          <table>
+            <thead>
+              <tr>
+                  <th>Tax Name</th>
+                  <th>Tax Code</th>
+                  <th>Tax %age</th>
+                  <th>Action</th>                      
+              </tr>
+            </thead>
+            <tbody>   
+              {props.taxrates.map((taxrate,index) => (
+                <tr key={taxrate._id}>
+                <th>{taxrate.taxname}</th>
+                <th>{taxrate.taxcode}</th>
+                <th>{taxrate.taxpercentage}</th>
+                <th>
+                  <a className="waves-effect waves-light btn" onClick={()=>{props.disableTax(taxrate._id)}}>
+                  <i className="material-icons white-text left">{taxrate.taxstatus ? "label" : "label_off"}</i>
+                    {taxrate.taxstatus ? "Disable" : "Enable"}
+                  </a>
+                </th>                      
+              </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+    
+  )
   }
 
-  disableTax(e){
-    console.log(e.target.getAttribute("rel"));
-    this.props.disableTax(e.target.getAttribute("rel"));
-  }
 
-  render(){
-    return(
-      <tr>
-        <th>{this.props.taxname}</th>
-        <th>{this.props.taxcode}</th>
-        <th>{this.props.taxpercentage}</th>
-        <th>
-          <a className="waves-effect waves-light btn" onClick={()=>{this.props.disableTax(this.props.rel)}}>
-          <i className="material-icons white-text left">{this.props.taxstatus ? "label" : "label_off"}</i>
-            {this.props.taxstatus ? "Disable" : "Enable"}
-          </a>
-        </th>                      
-      </tr>
-    )
-  }
-}
+export default TaxRow
