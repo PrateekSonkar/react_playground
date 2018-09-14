@@ -159,32 +159,50 @@ export default class POSView extends React.Component{
       <div className="row">
         <div className="col s7">
           <div className="row">
-            <div className="col s4">
-              <ul className="collection">
+            <div className="col s2">
+              <div>
+                <b>Food Group</b>
+              </div>
+              <ul>
                 {_lodash.uniqBy(this.props.foodMenu,"group").map((foodGroup,index) => <FoodGroup key={foodGroup.group + index} foodGroup={foodGroup.group} updateFilter={this.updateFilterCriteriaGroup} /> ) }
               </ul>
             </div>
-            <div className="col s8">
-              <div className="row">        
-                {_lodash.uniqBy(_lodash.filter(this.props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => <SubCategoryFilter key={foodGroup.subcategory + index} foodSubCategory={foodGroup.subcategory} updateFilter={this.updateFilterCriteriaSubCategory} />)}                
+            <div className="col s10">
+              <div className="row">  
+                <div><b>Filter By</b></div>      
+                <div>
+                {_lodash.uniqBy(_lodash.filter(this.props.foodMenu,{group: "FOOD"}),"subcategory").map((foodGroup,index) => <SubCategoryFilter 
+                  key={foodGroup.subcategory + index} 
+                  foodSubCategory={foodGroup.subcategory} 
+                  updateFilter={this.updateFilterCriteriaSubCategory} />)}                
+                </div>
               </div>
               <div className="row">
-                <ul className="collection" >
-                  {_lodash.filter(this.props.foodMenu,this.state.filterfooditem).map((foodItem,index) => <FoodItemsList key={foodItem.id} foodItem={foodItem} addItemToOrder={this.addItemToOrder} /> ) }                  
-                </ul>
-                
+                <div><b>Menu Item</b></div>      
+                <div className="customblock">
+                  {_lodash.filter(this.props.foodMenu,this.state.filterfooditem).map((foodItem,index) => <FoodItemsList key={foodItem.id} foodItem={foodItem} addItemToOrder={this.addItemToOrder} /> ) }
+                </div>
               </div>              
             </div>
           </div>
         </div>
-        <div className="col s5"> 
-          <div style={{margin:15}} >         
+        <div className="col s5 outlinediv"> 
+          <div style={{margin:15}}>         
+            <div className="center-align"><b>Order View</b></div>
             <div className="row">
-              {this.state.ordertypes.map((ordertype,index) => <OrderType ordertype={ordertype} updateSelectedOrderType={this.updateSelectedOrderType} key={ordertype+index} /> )}              
+              <div><b>Order Type</b></div>             
+              {this.state.ordertypes.map((ordertype,index) => <OrderType ordertype={ordertype} updateSelectedOrderType={this.updateSelectedOrderType} key={ordertype+index} /> )} 
             </div>
-            <div className="row right-align" >
-              <div>
-                Bill No: {this.state.billno}
+            <div className="row">
+              <div className="col s6 m6" >
+                <div>
+                  Bill No: {this.state.billno}
+                </div>
+              </div>
+              <div className="col s6 m6" >
+                <div>
+                  Table No: {this.state.billno}
+                </div>
               </div>
             </div>
             <div className="row">          
@@ -213,13 +231,13 @@ export default class POSView extends React.Component{
             </div>
             <div className="row">              
               <a 
-                className="waves-effect waves-light btn-small" 
+                className="waves-effect waves-light btn-small deep-orange" 
                 style={{margin:10}}
               >
                 Save & Print
               </a>
               <a 
-                className="waves-effect waves-light btn-small" 
+                className="waves-effect waves-light btn-small deep-orange" 
                 style={{margin:10}}
               >
                 Print KOT

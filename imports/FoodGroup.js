@@ -15,7 +15,8 @@ export default class FoodGroup extends React.Component{
 
   render(){
     return(
-      <li className="collection-item" style={{margin:10}} value={this.props.foodGroup} onClick={this.onClickHandler} >{this.props.foodGroup}</li>
+      //<li className="collection-item" style={{margin:10}} value={this.props.foodGroup} onClick={this.onClickHandler} >{this.props.foodGroup}</li>
+      <div className="customcardcss" value={this.props.foodGroup} onClick={this.onClickHandler}>{this.props.foodGroup}</div>
     );
   }
 }

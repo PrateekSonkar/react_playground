@@ -15,13 +15,13 @@ export default class FoodItemsList extends React.Component{
 
   render(){
     return(
-      <li 
-        className="collection-item" 
+      <div 
+        className="customcardmenuitemcss" 
         value={JSON.stringify(this.props.foodItem)} 
         onClick={this.onClickHandler}
       >
           {this.props.foodItem.item}
-      </li>
+      </div>
     );
   }
 }
