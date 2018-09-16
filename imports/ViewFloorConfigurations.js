@@ -8,21 +8,33 @@ const ViewFloorConfigurations = (props) => {
   if(Meteor.isClient){
     Tracker.autorun(function(){
       let floordetails = FloorConfigurations.find().fetch();
-      let flooroptions= FloorNumbers.find().fetch();;
-      let areaoptions= FloorAreas.find().fetch();;
+      let flooroptions= FloorNumbers.find().fetch();
+      let areaoptions= FloorAreas.find().fetch();
       let tablesetoptions= TableSets.find().fetch();
       if(floordetails.length > props.floorplan.length){
         console.log("New entry found");  
         props.updateState(floordetails)
       }
+      if(flooroptions.length > props.flooroptions.length ||areaoptions.length > props.areaoptions.length || tablesetoptions.length > props.tablesetoptions.length){
+        console.log("***New Floor Option Details***")
+        props.updateDropDown({
+          flooroptions:flooroptions,
+          areaoptions:areaoptions,
+          tablesetoptions:tablesetoptions
+        });
+      }
+
       // if(flooroptions.length > props.flooroptions.length || areaoptions.length > props.areaoptions.length || tablesetoptions.length > props.tablesetoptions.length){
-      //   props.updateDropDown({
-      //     flooroptions:flooroptions,
-      //     areaoptions:areaoptions,
-      //     tablesetoptions:tablesetoptions
-      //   });
+      //   console.log("Condition Satisfied")
+        // props.updateDropDown({
+        //   flooroptions:flooroptions,
+        //   areaoptions:areaoptions,
+        //   tablesetoptions:tablesetoptions
+        // });
+      // } else{
+      //   console.log("From Tracker ", flooroptions, areaoptions, tablesetoptions)
       // }
-      console.log("From Tracker ", flooroptions, areaoptions, tablesetoptions)
+      
 
     });
   }  

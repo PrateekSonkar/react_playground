@@ -8,9 +8,9 @@ export default class ConfigureFloor extends React.Component{
     super(props);
     this.state={
       floorplan:[],
-      floornumber:"",
-      floorarea:"",
-      tableset:"",
+      floornumber:"none",
+      floorarea:"none",
+      tableset:"none",
       quantity:0,
       flooroptions:[],
       areaoptions:[],
@@ -25,16 +25,6 @@ export default class ConfigureFloor extends React.Component{
     this.updateDropDown = this.updateDropDown.bind(this);
     this.initializeDropDown = this.initializeDropDown.bind(this);
   }
-
-  // componentWillMount(){
-  //   let floornumber = FloorNumbers.find().fetch();
-  //   console.log("will mount",floornumber)
-  //   this.setState((prevState) => {
-  //     return{
-  //       flooroptions:floornumber
-  //     }
-  //   })
-  // }
 
   componentDidMount() {
     this.initializeDropDown();
@@ -141,29 +131,29 @@ export default class ConfigureFloor extends React.Component{
                         <label htmlFor="count">Count</label>
                       </div>
                       <div className="input-field col s12">
-                        <select value="none" onChange={this.handleOnChangeFloor}>
+                        <select value={this.state.floornumber} onChange={this.handleOnChangeFloor}>
                           <option value="none">Choose your option</option>
-                          <option value="floor2">F Floor 2</option>
-                          <option value="floor3">F Floor 3</option>
+                          {this.state.flooroptions.map((flooroption) =>(
+                            <option key={flooroption._id} value={flooroption.floorcode}>{flooroption.floorname}</option>
+                          ))}
                         </select>
                         <label>Select Floor to Configure</label>
                       </div>
                       <div className="input-field col s12">
-                        <select value="none" onChange={this.handleOnChangeArea}>
+                        <select value={this.state.floorarea} onChange={this.handleOnChangeArea}>
                           <option value="none" disabled >Choose your option</option>
-                          <option value="bar">Bar</option>
-                          <option value="smoking">Smoking</option>
-                          <option value="nonsmoking">Non Smoking</option>
-                          <option value="family">Family</option>
+                          {this.state.areaoptions.map((areaoption) =>(
+                            <option key={areaoption._id} value={areaoption.floorareancode}>{areaoption.floorareaname}</option>
+                          ))}
                         </select>
                         <label>Select Area to Configure</label>
                       </div>        
                       <div className="input-field col s12">
-                        <select value="none" onChange={this.handleOnChangeTableSet}>
+                        <select value={this.state.tableset} onChange={this.handleOnChangeTableSet}>
                           <option value="none" >Choose your option</option>
-                          <option value="tc2">Table & 2 Chair</option>
-                          <option value="tc4">Table & 4 Chair</option>
-                          <option value="tc6">Table & 6 Chair</option>
+                          {this.state.tablesetoptions.map((tablesetoption) =>(
+                            <option key={tablesetoption._id} value={tablesetoption.tccode}>{tablesetoption.tcsetname}</option>
+                          ))}
                         </select>
                         <label>Select TableSet to Configure</label>
                       </div>

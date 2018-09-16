@@ -15,6 +15,7 @@ import CreateTimeSlot from '../imports/CreateTimeSlot';
 import CreateTableChairSet from '../imports/CreateTableChairSet';
 import ConfigureFloor from '../imports/ConfigureFloor';
 import CreateFloor from '../imports/CreateFloors';
+import redux101 from '../imports/redux-101';
 
 
 const AppRouter = () => {
@@ -35,7 +36,7 @@ const AppRouter = () => {
         <Route path="/floorarea"  component={CreateFloorArea} />
         <Route path="/timeslot"  component={CreateTimeSlot} />
         <Route path="/tcset"  component={CreateTableChairSet} />
-        <Route path="/configurefloor"  component={ConfigureFloor} />
+        <Route path="/configurefloor"  component={ConfigureFloor} />        
         <Route component={NotFoundPage} />
       </Switch>
     </div>
