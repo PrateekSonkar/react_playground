@@ -23,19 +23,6 @@ const ViewFloorConfigurations = (props) => {
           tablesetoptions:tablesetoptions
         });
       }
-
-      // if(flooroptions.length > props.flooroptions.length || areaoptions.length > props.areaoptions.length || tablesetoptions.length > props.tablesetoptions.length){
-      //   console.log("Condition Satisfied")
-        // props.updateDropDown({
-        //   flooroptions:flooroptions,
-        //   areaoptions:areaoptions,
-        //   tablesetoptions:tablesetoptions
-        // });
-      // } else{
-      //   console.log("From Tracker ", flooroptions, areaoptions, tablesetoptions)
-      // }
-      
-
     });
   }  
 

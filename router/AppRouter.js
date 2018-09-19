@@ -15,7 +15,8 @@ import CreateTimeSlot from '../imports/CreateTimeSlot';
 import CreateTableChairSet from '../imports/CreateTableChairSet';
 import ConfigureFloor from '../imports/ConfigureFloor';
 import CreateFloor from '../imports/CreateFloors';
-import redux101 from '../imports/redux-101';
+//import redux101 from '../imports/redux-101';
+import redux102 from '../imports/redux-102';
 
 
 const AppRouter = () => {
